@@ -23,8 +23,8 @@
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-            <version>8.0.33</version>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version> <!-- Ya es correcta, pero puedes probar 8.0.34 -->
         </dependency>
 
 

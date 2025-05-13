@@ -1,5 +1,4 @@
-package Week_2.Day_1.src.main.java.model;
-
+package model;
 
 /**
  * Clase que representa la entidad Usuario en el sistema.

@@ -1,10 +1,12 @@
-package Week_1.src.main.java.app;
+package app;
 
-import Week_1.src.main.java.config.DatabaseConnection;
-import Week_1.src.main.java.dao.UsuarioDAO;
-import Week_1.src.main.java.dao.UsuarioDAOImpl;
-import Week_1.src.main.java.model.Usuario;
-import Week_1.src.main.java.utils.Validaciones;
+import model.Usuario;
+import dao.UsuarioDAO;
+import dao.UsuarioDAOImpl;
+import utils.Validaciones;
+import config.DatabaseConnection;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 import java.sql.SQLException;
 import java.util.List;

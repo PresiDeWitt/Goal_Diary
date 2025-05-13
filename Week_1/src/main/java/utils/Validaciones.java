@@ -1,4 +1,4 @@
-package Week_1.src.main.java.utils;
+package utils;
 
 import java.util.regex.Pattern;
 

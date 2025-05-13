@@ -1,12 +1,11 @@
-package Week_2.Day_1.src.main.java.app;
+package app;
 
-
-import Week_2.Day_1.src.main.java.dao.IUsuarioDAO;
-import Week_2.Day_1.src.main.java.dao.UsuarioDAO;
-import Week_2.Day_1.src.main.java.service.UsuarioServicio;
+import dao.IUsuarioDAO;
+import dao.UsuarioDAO;
+import service.UsuarioServicio;
 
 /**
- * Clase principal que contiene el método main para probar la implementación del patrón DAO
+ * Clase principal que contiene el metodo main para probar la implementación del patrón DAO
  * y la estructura en capas del proyecto.
  */
 public class Main {
