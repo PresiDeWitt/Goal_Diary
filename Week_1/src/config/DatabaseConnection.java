@@ -1,4 +1,4 @@
-package config;
+package Week_1.src.config;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

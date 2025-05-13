@@ -1,7 +1,7 @@
-package dao;
+package Week_1.src.dao;
 
-import config.DatabaseConnection;
-import model.Usuario;
+import Week_1.src.config.DatabaseConnection;
+import Week_1.src.model.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

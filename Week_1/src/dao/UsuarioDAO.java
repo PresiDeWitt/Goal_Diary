@@ -1,6 +1,6 @@
-package dao;
+package Week_1.src.dao;
 
-import model.Usuario;
+import Week_1.src.model.Usuario;
 
 import java.sql.SQLException;
 import java.util.List;

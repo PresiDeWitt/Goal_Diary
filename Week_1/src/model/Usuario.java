@@ -1,4 +1,4 @@
-package model;
+package Week_1.src.model;
 
 /**
  * Clase modelo que representa un usuario en la base de datos
