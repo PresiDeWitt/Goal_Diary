@@ -1,4 +1,4 @@
-package src.main.java.model;
+package Week_2.Day_1.src.main.java.model;
 
 
 /**

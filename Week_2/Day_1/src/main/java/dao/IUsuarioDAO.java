@@ -1,7 +1,7 @@
-package src.main.java.dao;
+package Week_2.Day_1.src.main.java.dao;
 
 
-import src.main.java.model.Usuario;
+import Week_2.Day_1.src.main.java.model.Usuario;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package src.main.java.config;
+package Week_2.Day_1.src.main.java.config;
 
 public class DatabaseConfig {
     public static final String URL = "jdbc:mysql://localhost:3306/empresa_origen";

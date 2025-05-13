@@ -1,4 +1,5 @@
-package src.main.java.config;
+package Week_2.Day_1.src.main.java.config;
+
 
 import java.sql.Connection;
 import java.sql.DriverManager;
