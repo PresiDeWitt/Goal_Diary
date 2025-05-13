@@ -131,11 +131,4 @@ public class ProcesadorEstudiantes {
         }
     }
 
-    /**
-     * Método principal para probar la funcionalidad
-     */
-    public static void main(String[] args) {
-        ProcesadorEstudiantes procesador = new ProcesadorEstudiantes();
-        procesador.procesarArchivo("estudiantes.txt", "resultados_estudiantes.txt");
-    }
 }
