@@ -7,11 +7,11 @@
 
     <!-- Ajustado al nombre de tu proyecto -->
     <groupId>com.glitch</groupId>
-    <artifactId>Week_2</artifactId>
+    <artifactId>Week_1</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Week_2</name>  <!-- Nombre que aparece en tu estructura -->
+    <name>Week_1</name>  <!-- Nombre que aparece en tu estructura -->
 
     <properties>
         <!-- Actualizado a Java 8 (recomendado) -->
@@ -23,8 +23,8 @@
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.32</version>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.0.33</version>
         </dependency>
 
 

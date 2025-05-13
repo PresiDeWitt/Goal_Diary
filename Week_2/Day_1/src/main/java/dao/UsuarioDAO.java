@@ -1,7 +1,7 @@
-package Week_2.Day_1.src.dao;
+package src.main.java.dao;
 
-import Week_2.Day_1.src.config.DatabaseConnection;
-import Week_2.Day_1.src.model.Usuario;
+import src.main.java.config.DatabaseConnection;
+import src.main.java.model.Usuario;
 
 import java.sql.*;
 import java.util.ArrayList;
