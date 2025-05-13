@@ -1,8 +1,6 @@
 package dao;
 
-
 import config.DatabaseConnection;
-import dao.IUsuarioDAO;
 import model.Usuario;
 
 import java.sql.*;
@@ -35,5 +33,100 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
 
         return usuarios;
+    }
+
+    @Override
+    public Usuario getUsuarioById(int id) {
+        String query = "SELECT id, nombre, email FROM usuarios WHERE id = ?";
+        Usuario usuario = null;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    usuario = new Usuario();
+                    usuario.setId(rs.getInt("id"));
+                    usuario.setNombre(rs.getString("nombre"));
+                    usuario.setEmail(rs.getString("email"));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al obtener usuario por ID: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return usuario;
+    }
+
+    @Override
+    public int insertUsuario(Usuario usuario) {
+        String query = "INSERT INTO usuarios(nombre, email) VALUES(?, ?)";
+        int generatedId = -1;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, usuario.getNombre());
+            stmt.setString(2, usuario.getEmail());
+
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedId = rs.getInt(1);
+                    }
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error al insertar usuario: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return generatedId;
+    }
+
+    @Override
+    public int updateUsuario(Usuario usuario) {
+        String query = "UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?";
+        int affectedRows = 0;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, usuario.getNombre());
+            stmt.setString(2, usuario.getEmail());
+            stmt.setInt(3, usuario.getId());
+
+            affectedRows = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar usuario: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return affectedRows;
+    }
+
+    @Override
+    public boolean deleteUsuario(int id) {
+        String query = "DELETE FROM usuarios WHERE id = ?";
+        boolean deleted = false;
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, id);
+            deleted = stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar usuario: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return deleted;
     }
 }

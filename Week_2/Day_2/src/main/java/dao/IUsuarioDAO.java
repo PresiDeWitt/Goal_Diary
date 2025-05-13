@@ -4,15 +4,43 @@ import model.Usuario;
 import java.util.List;
 
 /**
- * Interfaz que define el contrato para las operaciones de acceso a datos
- * relacionadas con la entidad Usuario.
+ * Interfaz para el acceso a datos de usuarios
  */
 public interface IUsuarioDAO {
 
     /**
-     * Obtiene todos los usuarios de la base de datos.
-     *
-     * @return Lista de todos los usuarios encontrados
+     * Obtiene todos los usuarios de la base de datos
+     * @return Lista de usuarios
      */
     List<Usuario> getAllUsuarios();
+
+    /**
+     * Obtiene un usuario por su ID
+     * @param id ID del usuario
+     * @return Usuario encontrado o null si no existe
+     */
+    Usuario getUsuarioById(int id);
+
+    /**
+     * Inserta un nuevo usuario en la base de datos
+     *
+     * @param usuario Usuario a insertar
+     * @return true si se insertó correctamente, false en caso contrario
+     */
+    int insertUsuario(Usuario usuario);
+
+    /**
+     * Actualiza un usuario existente en la base de datos
+     *
+     * @param usuario Usuario con los datos actualizados
+     * @return true si se actualizó correctamente, false en caso contrario
+     */
+    int updateUsuario(Usuario usuario);
+
+    /**
+     * Elimina un usuario de la base de datos
+     * @param id ID del usuario a eliminar
+     * @return true si se eliminó correctamente, false en caso contrario
+     */
+    boolean deleteUsuario(int id);
 }
