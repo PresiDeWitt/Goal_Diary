@@ -1,4 +1,5 @@
-package Week_2.src.model;
+package Week_2.Day_1.src.model;
+
 
 /**
  * Clase que representa la entidad Usuario en el sistema.

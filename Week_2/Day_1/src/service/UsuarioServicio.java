@@ -1,7 +1,7 @@
-package Week_2.src.service;
+package Week_2.Day_1.src.service;
 
-import dao.IUsuarioDAO;
-import model.Usuario;
+import Week_2.Day_1.src.dao.IUsuarioDAO;
+import Week_2.Day_1.src.model.Usuario;
 
 import java.util.List;
 

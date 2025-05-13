@@ -1,9 +1,10 @@
-package Week_2.src.app;
+package Week_2.Day_1.src.app;
 
 
-import dao.IUsuarioDAO;
-import dao.UsuarioDAO;
-import service.UsuarioServicio;
+import Week_2.Day_1.src.dao.IUsuarioDAO;
+import Week_2.Day_1.src.dao.UsuarioDAO;
+import Week_2.Day_1.src.service.UsuarioServicio;
+
 
 /**
  * Clase principal que contiene el método main para probar la implementación del patrón DAO
