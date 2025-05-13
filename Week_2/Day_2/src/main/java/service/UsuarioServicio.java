@@ -3,6 +3,7 @@ package service;
 import dao.IUsuarioDAO;
 import model.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,5 +48,47 @@ public class UsuarioServicio {
      */
     public List<Usuario> obtenerUsuarios() {
         return usuarioDAO.getAllUsuarios();
+    }
+
+    /**
+     * Método que limpia y valida los datos de los usuarios
+     * - Elimina espacios en blanco en los nombres con trim()
+     * - Convierte los correos electrónicos a minúsculas con toLowerCase()
+     * - Valida que tanto el nombre como el email no sean null
+     */
+    public List<Usuario> limpiarYValidarUsuarios() {
+        List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
+        List<Usuario> usuariosLimpios = new ArrayList<>();
+
+        System.out.println("==== LIMPIEZA Y VALIDACIÓN DE USUARIOS ====");
+        for (Usuario usuario : usuarios) {
+            boolean esValido = true;
+
+            // Verificar si el nombre es null
+            if (usuario.getNombre() == null) {
+                System.out.println("Usuario ID " + usuario.getId() + ": INVÁLIDO - Nombre es null");
+                esValido = false;
+            } else {
+                // Limpiar espacios en blanco del nombre
+                usuario.setNombre(usuario.getNombre().trim());
+            }
+
+            // Verificar si el email es null
+            if (usuario.getEmail() == null) {
+                System.out.println("Usuario ID " + usuario.getId() + ": INVÁLIDO - Email es null");
+                esValido = false;
+            } else {
+                // Convertir email a minúsculas
+                usuario.setEmail(usuario.getEmail().toLowerCase());
+            }
+
+            if (esValido) {
+                usuariosLimpios.add(usuario);
+                System.out.println("Usuario " + usuario.getNombre() + " (" + usuario.getEmail() + "): VÁLIDO");
+            }
+        }
+        System.out.println("==========================================");
+
+        return usuariosLimpios;
     }
 }
