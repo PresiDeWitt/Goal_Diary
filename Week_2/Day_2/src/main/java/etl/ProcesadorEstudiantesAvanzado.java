@@ -31,11 +31,76 @@ public class ProcesadorEstudiantesAvanzado {
     }
 
     public void procesarArchivoConPersistencia(String archivoEntrada, String archivoSalida) {
-        // ... (resto del método permanece igual)
+
+        List<Estudiante> estudiantes = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivoEntrada));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(archivoSalida))) {
+
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                // Procesar cada línea del archivo
+                String[] partes = linea.split(";");
+
+                if (partes.length < 2) {
+                    System.out.println("Línea con formato incorrecto: " + linea);
+                    continue;
+                }
+
+                String nombre = partes[0];
+                double[] notas = new double[partes.length - 1];
+
+                // Convertir y almacenar las notas
+                for (int i = 1; i < partes.length; i++) {
+                    try {
+                        notas[i - 1] = Double.parseDouble(partes[i]);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error al convertir nota para " + nombre + ": " + partes[i]);
+                        notas[i - 1] = 0.0; // Valor por defecto
+                    }
+                }
+
+                // Calcular promedio y desviación estándar
+                double promedio = calcularPromedio(notas);
+                double desviacionEstandar = calcularDesviacionEstandar(notas, promedio);
+
+                Estudiante estudiante = new Estudiante(nombre, promedio, desviacionEstandar);
+                estudiantes.add(estudiante);
+            }
+
+            // Escribir resultados en el archivo de salida
+            for (Estudiante estudiante : estudiantes) {
+                writer.write(estudiante.toString());
+                writer.newLine();
+            }
+
+            // Persistir resultados en la base de datos
+            int guardados = persistirResultados(estudiantes);
+            System.out.println("Datos persistidos en la base de datos: " + guardados + " registros");
+
+        } catch (IOException e) {
+            System.err.println("Error al procesar el archivo: " + e.getMessage());
+        }
     }
 
-    // ... (otros métodos permanecen igual hasta persistirResultados)
+    private double calcularDesviacionEstandar(double[] notas, double promedio) {
+        double suma = 0.0;
+        for (double nota : notas) {
+            suma += Math.pow(nota - promedio, 2);
+        }
+        return Math.sqrt(suma / notas.length);
+    }
 
+    private double calcularPromedio(double[] notas) {
+        if (notas.length == 0) return 0.0;
+
+        double suma = 0.0;
+        for (double nota : notas) {
+            suma += nota;
+        }
+
+        return suma / notas.length;
+    }
     /**
      * Persiste los resultados en la base de datos
      * @return Número de registros guardados exitosamente
@@ -98,11 +163,12 @@ public class ProcesadorEstudiantesAvanzado {
         }
     }
 
-    /**
-     * Método principal para probar la funcionalidad
-     */
     public static void main(String[] args) {
         ProcesadorEstudiantesAvanzado procesador = new ProcesadorEstudiantesAvanzado();
-        procesador.procesarArchivoConPersistencia("estudiantes.txt", "resultados_estudiantes.txt");
+        String archivoEntrada = "estudiantes.page";
+        String archivoSalida = "resultados.page";
+
+        procesador.procesarArchivoConPersistencia(archivoEntrada, archivoSalida);
     }
+
 }
