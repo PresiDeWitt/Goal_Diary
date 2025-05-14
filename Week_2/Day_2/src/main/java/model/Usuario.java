@@ -4,30 +4,35 @@ package model;
  * Clase que representa la entidad Usuario en el sistema.
  * Corresponde a la capa de modelo en la arquitectura en capas.
  */
+
+import java.time.LocalDate;
+
 public class Usuario {
     private int id;
     private String nombre;
     private String email;
+    private LocalDate fechaNacimiento;
 
-    /**
-     * Constructor vacío
-     */
-    public Usuario() {
-    }
+    // Constructores
+    public Usuario() {}
 
-    /**
-     * Constructor con todos los campos
-     *
-     * @param id Identificador único del usuario
-     * @param nombre Nombre del usuario
-     * @param email Correo electrónico del usuario
-     */
-    public Usuario(int id, String nombre, String email) {
+    public Usuario(int id, String nombre, String email, LocalDate fechaNacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
+        this.fechaNacimiento = fechaNacimiento;
     }
 
+    // Getters y setters
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    // Resto de getters y setters...
     // Getters y setters
 
     public int getId() {
@@ -56,6 +61,8 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario [id=" + id + ", nombre=" + nombre + ", email=" + email + "]";
+        return "Usuario [id=" + id + ", nombre=" + nombre + ", email=" + email +
+                ", fechaNacimiento=" + fechaNacimiento + "]";
     }
 }
+

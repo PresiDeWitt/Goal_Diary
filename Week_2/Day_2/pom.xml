@@ -5,28 +5,30 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Ajustado al nombre de tu proyecto -->
-    <groupId>com.glitch</groupId>
-    <artifactId>Week_2</artifactId>
-    <version>1.0.0</version>
+    <parent>
+        <groupId>com.glitch</groupId>
+        <artifactId>Week_2</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>Day_2</artifactId>
     <packaging>jar</packaging>
 
-    <name>Week_2</name>  <!-- Nombre que aparece en tu estructura -->
+    <name>Day_2</name>
 
     <properties>
-        <!-- Actualizado a Java 8 (recomendado) -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
+        <!-- Conector de MySQL -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
         </dependency>
-
 
         <!-- JUnit para testing -->
         <dependency>
@@ -35,34 +37,5 @@
             <version>5.9.3</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.glitch</groupId>
-            <artifactId>Week_2</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.glitch</groupId>
-            <artifactId>Week_2</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.glitch</groupId>
-            <artifactId>Week_2</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <!-- Plugin para compilación -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.11.0</version>
-            </plugin>
-        </plugins>
-    </build>
+    </dependencies><build><plugins><plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><configuration><source>8</source><target>8</target><compilerArgs>--enable-preview</compilerArgs></configuration></plugin></plugins></build>
 </project>

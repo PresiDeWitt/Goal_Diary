@@ -63,7 +63,7 @@ public class Main {
         System.out.println("\n=== 2. PROCESAMIENTO DE DATOS DE ESTUDIANTES ===");
 
         String archivoEntrada = "datos_estudiantes.txt";
-        String archivoSalida = "resultados.txt";
+        String archivoSalida = "resultados_estudiantes_db.txt";
 
         System.out.println("Archivo de entrada: " + archivoEntrada);
         System.out.println("Archivo de salida: " + archivoSalida);
