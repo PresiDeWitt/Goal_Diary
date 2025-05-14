@@ -55,14 +55,22 @@ public class Main {
      * Demostración del procesamiento de archivo de estudiantes
      */
     private static void demostrarProcesamientoEstudiantes() {
-        System.out.println("\n=== 2. PROCESAMIENTO DE ARCHIVO DE ESTUDIANTES ===");
+        System.out.println("=== PROGRAMA DE PROCESAMIENTO DE DATOS DE ESTUDIANTES ===");
 
-        // Crear una instancia del procesador
-        ProcesadorEstudiantes procesador = new ProcesadorEstudiantes();
+        String archivoEntrada = "datos_estudiantes.txt";
+        String archivoSalida = "resultados_estudiantes.txt";
 
-        // Procesar archivo
-        System.out.println("\nIniciando procesamiento del archivo estudiantes.txt...");
-        procesador.procesarArchivo("estudiantes.txt", "resultados_estudiantes.txt");
+        System.out.println("Archivo de entrada: " + archivoEntrada);
+        System.out.println("Archivo de salida: " + archivoSalida);
+        System.out.println();
+
+        try {
+            ProcesadorEstudiantes.procesarArchivo(archivoEntrada, archivoSalida);
+            System.out.println("\nProcesamiento completado exitosamente.");
+        } catch (Exception e) {
+            System.err.println("\nError durante el procesamiento: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**

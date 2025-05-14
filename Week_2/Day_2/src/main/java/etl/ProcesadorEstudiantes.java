@@ -3,22 +3,86 @@ package etl;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 /**
- * Clase que procesa un archivo de estudiantes con notas,
- * calcula estadísticas y genera un archivo de resultados.
+ * Clase para procesar datos de estudiantes desde un archivo de texto,
+ * calculando estadísticas y generando un nuevo archivo con los resultados.
  */
 public class ProcesadorEstudiantes {
 
-    private static class Estudiante {
+    /**
+     * Clase interna para representar los datos de un estudiante
+     */
+    static class Estudiante {
         private String nombre;
+        private List<Double> notas;
         private double promedio;
         private double desviacionEstandar;
 
-        public Estudiante(String nombre, double promedio, double desviacionEstandar) {
+        public Estudiante(String nombre) {
             this.nombre = nombre;
-            this.promedio = promedio;
-            this.desviacionEstandar = desviacionEstandar;
+            this.notas = new ArrayList<>();
+        }
+
+        public void agregarNota(double nota) {
+            notas.add(nota);
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public List<Double> getNotas() {
+            return notas;
+        }
+
+        public double getPromedio() {
+            return promedio;
+        }
+
+        public double getDesviacionEstandar() {
+            return desviacionEstandar;
+        }
+
+        /**
+         * Calcula el promedio de las notas del estudiante
+         */
+        public void calcularPromedio() {
+            if (notas.isEmpty()) {
+                promedio = 0.0;
+                return;
+            }
+
+            double suma = 0.0;
+            for (Double nota : notas) {
+                suma += nota;
+            }
+            promedio = suma / notas.size();
+        }
+
+        /**
+         * Calcula la desviación estándar de las notas del estudiante
+         * fórmula: sqrt(sum((xi - promedio)^2) / n)
+         */
+        public void calcularDesviacionEstandar() {
+            if (notas.size() <= 1) {
+                desviacionEstandar = 0.0;
+                return;
+            }
+
+            // Primero calculamos el promedio si no ha sido calculado
+            if (promedio == 0.0) {
+                calcularPromedio();
+            }
+
+            double sumaDiferenciasCuadradas = 0.0;
+            for (Double nota : notas) {
+                double diferencia = nota - promedio;
+                sumaDiferenciasCuadradas += Math.pow(diferencia, 2);
+            }
+
+            desviacionEstandar = Math.sqrt(sumaDiferenciasCuadradas / notas.size());
         }
 
         @Override
@@ -28,106 +92,123 @@ public class ProcesadorEstudiantes {
     }
 
     /**
-     * Procesa el archivo de entrada y genera un archivo de salida con estadísticas
+     * Lee el archivo de entrada, procesa los datos y escribe los resultados en el archivo de salida
      *
-     * @param archivoEntrada Ruta del archivo de entrada (formato: Nombre;nota1;nota2;...;nota10)
-     * @param archivoSalida Ruta del archivo de salida (formato: Nombre;Promedio;Desviación estándar)
+     * @param archivoEntrada Ruta del archivo de entrada
+     * @param archivoSalida Ruta del archivo de salida
+     * @throws IOException Si ocurre un error al leer o escribir los archivos
      */
-    public void procesarArchivo(String archivoEntrada, String archivoSalida) {
+    public static void procesarArchivo(String archivoEntrada, String archivoSalida) throws IOException {
+        List<Estudiante> estudiantes = leerArchivoEstudiantes(archivoEntrada);
+
+        // Calcular estadísticas para cada estudiante
+        for (Estudiante estudiante : estudiantes) {
+            estudiante.calcularPromedio();
+            estudiante.calcularDesviacionEstandar();
+        }
+
+        // Escribir resultados en el archivo de salida
+        escribirArchivoResultados(estudiantes, archivoSalida);
+
+        // Mostrar resultados en consola
+        mostrarResultados(estudiantes);
+    }
+
+    /**
+     * Lee el archivo de entrada y crea una lista de objetos Estudiante
+     *
+     * @param archivoEntrada Ruta del archivo de entrada
+     * @return Lista de estudiantes con sus notas
+     * @throws IOException Si ocurre un error al leer el archivo
+     */
+    private static List<Estudiante> leerArchivoEstudiantes(String archivoEntrada) throws IOException {
         List<Estudiante> estudiantes = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(archivoEntrada))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(archivoEntrada))) {
             String linea;
-            while ((linea = reader.readLine()) != null) {
-                // Procesar cada línea del archivo
-                String[] partes = linea.split(";");
-
-                if (partes.length < 2) {
-                    System.out.println("Línea con formato incorrecto: " + linea);
-                    continue;
+            while ((linea = br.readLine()) != null) {
+                if (linea.trim().isEmpty()) {
+                    continue; // Ignorar líneas vacías
                 }
 
-                String nombre = partes[0];
-                double[] notas = new double[partes.length - 1];
+                // Usando StringTokenizer para separar los datos
+                StringTokenizer tokenizer = new StringTokenizer(linea, ";");
 
-                // Convertir y almacenar las notas
-                for (int i = 1; i < partes.length; i++) {
-                    try {
-                        notas[i - 1] = Double.parseDouble(partes[i]);
-                    } catch (NumberFormatException e) {
-                        System.out.println("Error al convertir nota para " + nombre + ": " + partes[i]);
-                        notas[i - 1] = 0.0; // Valor por defecto
+                if (tokenizer.hasMoreTokens()) {
+                    String nombre = tokenizer.nextToken().trim();
+                    Estudiante estudiante = new Estudiante(nombre);
+
+                    // Leer todas las notas
+                    while (tokenizer.hasMoreTokens()) {
+                        try {
+                            double nota = Double.parseDouble(tokenizer.nextToken().trim());
+                            estudiante.agregarNota(nota);
+                        } catch (NumberFormatException e) {
+                            System.err.println("Error al convertir nota para estudiante " + nombre + ": " + e.getMessage());
+                        }
                     }
+
+                    estudiantes.add(estudiante);
                 }
-
-                // Calcular estadísticas
-                double promedio = calcularPromedio(notas);
-                double desviacion = calcularDesviacionEstandar(notas, promedio);
-
-                // Crear y agregar estudiante
-                Estudiante estudiante = new Estudiante(nombre, promedio, desviacion);
-                estudiantes.add(estudiante);
-
-                System.out.println("Procesado: " + nombre + " - Promedio: " +
-                        String.format("%.2f", promedio) + " - Desviación: " +
-                        String.format("%.2f", desviacion));
             }
-
-            // Escribir resultados en archivo de salida
-            escribirResultados(estudiantes, archivoSalida);
-
-        } catch (IOException e) {
-            System.err.println("Error al procesar el archivo: " + e.getMessage());
         }
+
+        return estudiantes;
     }
 
     /**
-     * Calcula el promedio de un array de notas
+     * Escribe los resultados en el archivo de salida
+     *
+     * @param estudiantes Lista de estudiantes con sus estadísticas calculadas
+     * @param archivoSalida Ruta del archivo de salida
+     * @throws IOException Si ocurre un error al escribir el archivo
      */
-    private double calcularPromedio(double[] notas) {
-        if (notas.length == 0) return 0.0;
-
-        double suma = 0.0;
-        for (double nota : notas) {
-            suma += nota;
-        }
-
-        return suma / notas.length;
-    }
-
-    /**
-     * Calcula la desviación estándar de un array de notas
-     */
-    private double calcularDesviacionEstandar(double[] notas, double promedio) {
-        if (notas.length <= 1) return 0.0;
-
-        double sumaCuadrados = 0.0;
-        for (double nota : notas) {
-            sumaCuadrados += Math.pow(nota - promedio, 2);
-        }
-
-        return Math.sqrt(sumaCuadrados / notas.length);
-    }
-
-    /**
-     * Escribe los resultados en un archivo de salida
-     */
-    private void escribirResultados(List<Estudiante> estudiantes, String archivoSalida) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivoSalida))) {
+    private static void escribirArchivoResultados(List<Estudiante> estudiantes, String archivoSalida) throws IOException {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(archivoSalida))) {
             // Escribir encabezado
-            writer.write("Nombre;Promedio;Desviación estándar");
-            writer.newLine();
+            pw.println("Nombre;Promedio;Desviación Estándar");
 
             // Escribir datos de cada estudiante
             for (Estudiante estudiante : estudiantes) {
-                writer.write(estudiante.toString());
-                writer.newLine();
+                pw.println(estudiante.toString());
             }
+        }
+    }
 
-            System.out.println("Archivo de resultados generado exitosamente: " + archivoSalida);
+    /**
+     * Muestra los resultados en la consola
+     *
+     * @param estudiantes Lista de estudiantes con sus estadísticas calculadas
+     */
+    private static void mostrarResultados(List<Estudiante> estudiantes) {
+        System.out.println("==== RESULTADOS DEL PROCESAMIENTO ====");
+        System.out.println("Nombre | Promedio | Desviación Estándar");
+        System.out.println("-----------------------------------------");
 
+        for (Estudiante estudiante : estudiantes) {
+            System.out.printf("%-20s | %-8.2f | %-8.2f%n",
+                    estudiante.getNombre(),
+                    estudiante.getPromedio(),
+                    estudiante.getDesviacionEstandar());
+        }
+
+        System.out.println("-----------------------------------------");
+        System.out.println("Total de estudiantes procesados: " + estudiantes.size());
+    }
+
+    /**
+     * Método principal para probar la funcionalidad
+     */
+    public static void main(String[] args) {
+        String archivoEntrada = "datos_estudiantes.txt";
+        String archivoSalida = "resultados_estudiantes.txt";
+
+        try {
+            procesarArchivo(archivoEntrada, archivoSalida);
+            System.out.println("\nEl archivo de resultados ha sido generado exitosamente: " + archivoSalida);
         } catch (IOException e) {
-            System.err.println("Error al escribir el archivo de resultados: " + e.getMessage());
+            System.err.println("Error al procesar el archivo: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
