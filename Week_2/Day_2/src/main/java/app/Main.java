@@ -81,6 +81,7 @@ public class Main {
     /**
      * Demostración del procesamiento avanzado con persistencia
      */
+    //TODO: Arreglar el método de persistencia
     private static void demostrarProcesamientoAvanzado() {
         System.out.println("\n=== 3. PROCESAMIENTO AVANZADO CON PERSISTENCIA ===");
 

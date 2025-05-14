@@ -1,5 +1,4 @@
-package etl.Day_3.src.main.java.validator;
-
+package validator;
 import model.Usuario;
 import java.time.LocalDate;
 import java.time.Period;

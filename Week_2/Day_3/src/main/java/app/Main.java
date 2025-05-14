@@ -1,8 +1,7 @@
-package etl.Day_3.src.main.java.app;
+package app;
 
-import etl.Day_3.src.main.java.validator.UsuarioValidator;
 import model.Usuario;
-import java.time.LocalDate;
+import validator.UsuarioValidator;
 import java.util.ArrayList;
 import java.util.List;
 
