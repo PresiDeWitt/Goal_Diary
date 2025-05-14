@@ -1,20 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-         http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
+<project>
     <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.PresiDeWitt</groupId>
+        <artifactId>Goal_Diary</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
 
-    <groupId>com.glitch</groupId>
     <artifactId>Week_2</artifactId>
-    <version>1.0.0</version>
     <packaging>pom</packaging>
-
-    <name>Week_2</name>
 
     <modules>
         <module>Day_1</module>
         <module>Day_2</module>
-        <module>Day_3</module> <!-- Si decides moverlo fuera y hacerlo módulo -->
+        <module>Day_3</module>
     </modules>
 </project>
