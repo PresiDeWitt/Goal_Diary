@@ -130,5 +130,4 @@ public class ProcesadorEstudiantes {
             System.err.println("Error al escribir el archivo de resultados: " + e.getMessage());
         }
     }
-
 }

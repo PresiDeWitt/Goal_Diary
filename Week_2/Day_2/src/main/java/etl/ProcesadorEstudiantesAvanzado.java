@@ -163,12 +163,4 @@ public class ProcesadorEstudiantesAvanzado {
         }
     }
 
-    public static void main(String[] args) {
-        ProcesadorEstudiantesAvanzado procesador = new ProcesadorEstudiantesAvanzado();
-        String archivoEntrada = "estudiantes.page";
-        String archivoSalida = "resultados.page";
-
-        procesador.procesarArchivoConPersistencia(archivoEntrada, archivoSalida);
-    }
-
 }

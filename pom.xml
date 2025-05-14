@@ -1,0 +1,13 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.yourcompany</groupId>
+    <artifactId>goal-diary</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>Week_1</module>
+        <module>Week_2/Day_1</module>
+        <module>Week_2/Day_2</module><!-- Nueva ruta al módulo -->
+    </modules>
+</project>

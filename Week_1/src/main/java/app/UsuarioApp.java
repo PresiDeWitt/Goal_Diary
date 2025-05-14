@@ -5,8 +5,6 @@ import dao.UsuarioDAO;
 import dao.UsuarioDAOImpl;
 import utils.Validaciones;
 import config.DatabaseConnection;
-import java.sql.Connection;
-import java.sql.DriverManager;
 
 import java.sql.SQLException;
 import java.util.List;
