@@ -42,7 +42,7 @@ public class UsuarioServicio {
     }
 
     /**
-     * Método que devuelve la lista de todos los usuarios
+     * Metodo que devuelve la lista de todos los usuarios
      *
      * @return Lista de usuarios
      */
@@ -51,10 +51,10 @@ public class UsuarioServicio {
     }
 
     /**
-     * Método que limpia y valida los datos de los usuarios
+     * Metodo que limpia y valida los datos de los usuarios
      * - Elimina espacios en blanco en los nombres con trim()
      * - Convierte los correos electrónicos a minúsculas con toLowerCase()
-     * - Valida que tanto el nombre como el email no sean null
+     * - Valida que tanto el nombre como el email no sean null ni estén vacíos
      */
     public List<Usuario> limpiarYValidarUsuarios() {
         List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
@@ -64,22 +64,31 @@ public class UsuarioServicio {
         for (Usuario usuario : usuarios) {
             boolean esValido = true;
 
-            // Verificar si el nombre es null
-            if (usuario.getNombre() == null) {
-                System.out.println("Usuario ID " + usuario.getId() + ": INVÁLIDO - Nombre es null");
+            String nombreMostrar = (usuario.getNombre() != null) ? usuario.getNombre() : "null";
+            String emailMostrar = (usuario.getEmail() != null) ? usuario.getEmail() : "null";
+
+            // Verificar si el nombre es null o vacío
+            if (usuario.getNombre() == null || usuario.getNombre().trim().isEmpty()) {
+                System.out.println("Usuario ID " + usuario.getId() + " (" + nombreMostrar + ", " + emailMostrar + "): INVÁLIDO - Nombre es null o vacío");
                 esValido = false;
             } else {
                 // Limpiar espacios en blanco del nombre
                 usuario.setNombre(usuario.getNombre().trim());
             }
 
-            // Verificar si el email es null
-            if (usuario.getEmail() == null) {
-                System.out.println("Usuario ID " + usuario.getId() + ": INVÁLIDO - Email es null");
+            // Verificar si el email es null o vacío
+            if (usuario.getEmail() == null || usuario.getEmail().trim().isEmpty()) {
+                System.out.println("Usuario ID " + usuario.getId() + " (" + nombreMostrar + ", " + emailMostrar + "): INVÁLIDO - Email es null o vacío");
                 esValido = false;
             } else {
-                // Convertir email a minúsculas
-                usuario.setEmail(usuario.getEmail().toLowerCase());
+                // Verificar formato de email (contiene @)
+                if (!usuario.getEmail().contains("@")) {
+                    System.out.println("Usuario ID " + usuario.getId() + " (" + nombreMostrar + ", " + emailMostrar + "): INVÁLIDO - Email con formato incorrecto");
+                    esValido = false;
+                } else {
+                    // Convertir email a minúsculas
+                    usuario.setEmail(usuario.getEmail().toLowerCase());
+                }
             }
 
             if (esValido) {
