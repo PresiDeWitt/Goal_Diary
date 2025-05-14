@@ -33,32 +33,37 @@ public class Main {
     private static void demostrarLimpiezaUsuarios() {
         System.out.println("\n=== 1. LIMPIEZA Y VALIDACIÓN DE USUARIOS ===");
 
-        // Crear una instancia del DAO y del servicio
-        IUsuarioDAO usuarioDAO = new UsuarioDAO();
-        UsuarioServicio servicio = new UsuarioServicio(usuarioDAO);
+        try {
+            // Crear una instancia del DAO y del servicio
+            IUsuarioDAO usuarioDAO = new UsuarioDAO();
+            UsuarioServicio servicio = new UsuarioServicio(usuarioDAO);
 
-        // Mostrar usuarios originales
-        System.out.println("\nUsuarios originales:");
-        servicio.mostrarUsuarios();
+            // Mostrar usuarios originales
+            System.out.println("\nUsuarios originales:");
+            servicio.mostrarUsuarios();
 
-        // Limpiar y validar usuarios
-        System.out.println("\nProceso de limpieza y validación:");
-        List<Usuario> usuariosLimpios = servicio.limpiarYValidarUsuarios();
+            // Limpiar y validar usuarios
+            System.out.println("\nProceso de limpieza y validación:");
+            List<Usuario> usuariosLimpios = servicio.limpiarYValidarUsuarios();
 
-        // Mostrar resumen
-        System.out.println("\nResumen:");
-        System.out.println("Total de usuarios: " + servicio.obtenerUsuarios().size());
-        System.out.println("Usuarios válidos después de limpieza: " + usuariosLimpios.size());
+            // Mostrar resumen
+            System.out.println("\nResumen:");
+            System.out.println("Total de usuarios: " + servicio.obtenerUsuarios().size());
+            System.out.println("Usuarios válidos después de limpieza: " + usuariosLimpios.size());
+        } catch (Exception e) {
+            System.err.println("Error en demostrarLimpiezaUsuarios: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     /**
      * Demostración del procesamiento de archivo de estudiantes
      */
     private static void demostrarProcesamientoEstudiantes() {
-        System.out.println("=== PROGRAMA DE PROCESAMIENTO DE DATOS DE ESTUDIANTES ===");
+        System.out.println("\n=== 2. PROCESAMIENTO DE DATOS DE ESTUDIANTES ===");
 
         String archivoEntrada = "datos_estudiantes.txt";
-        String archivoSalida = "resultados_estudiantes.txt";
+        String archivoSalida = "resultados.txt";
 
         System.out.println("Archivo de entrada: " + archivoEntrada);
         System.out.println("Archivo de salida: " + archivoSalida);
@@ -79,11 +84,17 @@ public class Main {
     private static void demostrarProcesamientoAvanzado() {
         System.out.println("\n=== 3. PROCESAMIENTO AVANZADO CON PERSISTENCIA ===");
 
-        // Crear una instancia del procesador avanzado
-        ProcesadorEstudiantesAvanzado procesadorAvanzado = new ProcesadorEstudiantesAvanzado();
+        try {
+            // Crear una instancia del procesador avanzado
+            ProcesadorEstudiantesAvanzado procesadorAvanzado = new ProcesadorEstudiantesAvanzado();
 
-        // Procesar archivo con persistencia
-        System.out.println("\nIniciando procesamiento del archivo con persistencia...");
-        procesadorAvanzado.procesarArchivoConPersistencia("estudiantes.txt", "resultados_estudiantes_bd.txt");
+            // Procesar archivo con persistencia
+            System.out.println("\nIniciando procesamiento del archivo con persistencia...");
+            procesadorAvanzado.procesarArchivo("datos_estudiantes.txt", "resultados_estudiantes_bd.txt");
+
+        } catch (Exception e) {
+            System.err.println("\nError durante el procesamiento avanzado: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

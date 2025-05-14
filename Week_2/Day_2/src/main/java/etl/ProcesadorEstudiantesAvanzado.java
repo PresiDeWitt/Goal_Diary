@@ -92,25 +92,40 @@ public class ProcesadorEstudiantesAvanzado {
 
     /**
      * Lee el archivo de entrada, procesa los datos y escribe los resultados en el archivo de salida
+     * También persiste los datos en la base de datos
      *
      * @param archivoEntrada Ruta del archivo de entrada
      * @param archivoSalida Ruta del archivo de salida
-     * @throws IOException Si ocurre un error al leer o escribir los archivos
      */
-    public static void procesarArchivo(String archivoEntrada, String archivoSalida) throws IOException {
-        List<Estudiante> estudiantes = leerArchivoEstudiantes(archivoEntrada);
+    public void procesarArchivo(String archivoEntrada,String archivoSalida) {
+        try {
+            List<Estudiante> estudiantes = leerArchivoEstudiantes(archivoEntrada);
 
-        // Calcular estadísticas para cada estudiante
-        for (Estudiante estudiante : estudiantes) {
-            estudiante.calcularPromedio();
-            estudiante.calcularDesviacionEstandar();
+            // Calcular estadísticas para cada estudiante
+            for (Estudiante estudiante : estudiantes) {
+                estudiante.calcularPromedio();
+                estudiante.calcularDesviacionEstandar();
+            }
+
+            // Escribir resultados en el archivo de salida
+            escribirArchivoResultados(estudiantes, archivoSalida);
+
+            // Persistir datos en la base de datos
+            persistirEstudiantesEnBD(estudiantes);
+
+            // Mostrar resultados en consola
+            mostrarResultados(estudiantes);
+
+            System.out.println("\nEl archivo de resultados ha sido generado exitosamente: " + archivoSalida);
+            System.out.println("Los datos han sido guardados en la base de datos.");
+
+        } catch (IOException e) {
+            System.err.println("Error al procesar el archivo: " + e.getMessage());
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.err.println("Error al interactuar con la base de datos: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        // Escribir resultados en el archivo de salida
-        escribirArchivoResultados(estudiantes, archivoSalida);
-
-        // Mostrar resultados en consola
-        mostrarResultados(estudiantes);
     }
 
     /**
@@ -121,12 +136,20 @@ public class ProcesadorEstudiantesAvanzado {
      * @return Lista de estudiantes con sus notas
      * @throws IOException Si ocurre un error al leer el archivo
      */
-    private static List<Estudiante> leerArchivoEstudiantes(String archivoEntrada) throws IOException {
+    private List<Estudiante> leerArchivoEstudiantes(String archivoEntrada) throws IOException {
         List<Estudiante> estudiantes = new ArrayList<>();
 
-        try (BufferedReader br = new BufferedReader(new FileReader(archivoEntrada))) {
+        File archivo = new File(archivoEntrada);
+        if (!archivo.exists()) {
+            throw new IOException("El archivo de entrada no existe: " + archivoEntrada);
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
             String linea;
+            int numeroLinea = 0;
+
             while ((linea = br.readLine()) != null) {
+                numeroLinea++;
                 if (linea.trim().isEmpty()) {
                     continue; // Ignorar líneas vacías
                 }
@@ -144,11 +167,13 @@ public class ProcesadorEstudiantesAvanzado {
                             double nota = Double.parseDouble(datos[i].trim());
                             estudiante.agregarNota(nota);
                         } catch (NumberFormatException e) {
-                            System.err.println("Error al convertir nota para estudiante " + nombre + ": " + e.getMessage());
+                            System.err.println("Error en línea " + numeroLinea + ": No se pudo convertir la nota para el estudiante " + nombre + " - " + datos[i]);
                         }
                     }
 
                     estudiantes.add(estudiante);
+                } else {
+                    System.err.println("Error en línea " + numeroLinea + ": Formato incorrecto - " + linea);
                 }
             }
         }
@@ -163,7 +188,7 @@ public class ProcesadorEstudiantesAvanzado {
      * @param archivoSalida Ruta del archivo de salida
      * @throws IOException Si ocurre un error al escribir el archivo
      */
-    private static void escribirArchivoResultados(List<Estudiante> estudiantes, String archivoSalida) throws IOException {
+    private void escribirArchivoResultados(List<Estudiante> estudiantes, String archivoSalida) throws IOException {
         try (PrintWriter pw = new PrintWriter(new FileWriter(archivoSalida))) {
             // Escribir encabezado
             pw.println("Nombre;Promedio;Desviación Estándar");
@@ -176,12 +201,62 @@ public class ProcesadorEstudiantesAvanzado {
     }
 
     /**
+     * Persiste los datos de los estudiantes en la base de datos
+     *
+     * @param estudiantes Lista de estudiantes a persistir
+     * @throws SQLException Si ocurre un error al interactuar con la base de datos
+     */
+    private void persistirEstudiantesEnBD(List<Estudiante> estudiantes) throws SQLException {
+        // Obtener conexión a la base de datos
+        try (Connection conn = DatabaseConnection.getConnection()) {
+            // Verificar si existe la tabla, si no, crearla
+            crearTablaEstudiantesSiNoExiste(conn);
+
+            // Preparar la sentencia SQL para insertar estudiantes
+            String sql = "INSERT INTO estudiantes (nombre, promedio, desviacion_estandar) VALUES (?, ?, ?)";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                int registrosInsertados = 0;
+
+                for (Estudiante estudiante : estudiantes) {
+                    pstmt.setString(1, estudiante.getNombre());
+                    pstmt.setDouble(2, estudiante.getPromedio());
+                    pstmt.setDouble(3, estudiante.getDesviacionEstandar());
+
+                    registrosInsertados += pstmt.executeUpdate();
+                }
+
+                System.out.println("Se han insertado " + registrosInsertados + " registros en la base de datos.");
+            }
+        }
+    }
+
+    /**
+     * Crea la tabla de estudiantes si no existe
+     *
+     * @param conn Conexión a la base de datos
+     * @throws SQLException Si ocurre un error al interactuar con la base de datos
+     */
+    private void crearTablaEstudiantesSiNoExiste(Connection conn) throws SQLException {
+        String sql = "CREATE TABLE IF NOT EXISTS estudiantes (" +
+                "id INT AUTO_INCREMENT PRIMARY KEY, " +
+                "nombre VARCHAR(100) NOT NULL, " +
+                "promedio DOUBLE NOT NULL, " +
+                "desviacion_estandar DOUBLE NOT NULL, " +
+                "fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+
+        try (Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        }
+    }
+
+    /**
      * Muestra los resultados en la consola
      *
      * @param estudiantes Lista de estudiantes con sus estadísticas calculadas
      */
-    private static void mostrarResultados(List<Estudiante> estudiantes) {
-        System.out.println("==== RESULTADOS DEL PROCESAMIENTO (usando String.split) ====");
+    private void mostrarResultados(List<Estudiante> estudiantes) {
+        System.out.println("==== RESULTADOS DEL PROCESAMIENTO AVANZADO ====");
         System.out.println("Nombre | Promedio | Desviación Estándar");
         System.out.println("-----------------------------------------");
 
@@ -194,21 +269,5 @@ public class ProcesadorEstudiantesAvanzado {
 
         System.out.println("-----------------------------------------");
         System.out.println("Total de estudiantes procesados: " + estudiantes.size());
-    }
-
-    /**
-     * Método principal para probar la funcionalidad
-     */
-    public static void main(String[] args) {
-        String archivoEntrada = "datos_estudiantes.txt";
-        String archivoSalida = "resultados_estudiantes_split.txt";
-
-        try {
-            procesarArchivo(archivoEntrada, archivoSalida);
-            System.out.println("\nEl archivo de resultados ha sido generado exitosamente: " + archivoSalida);
-        } catch (IOException e) {
-            System.err.println("Error al procesar el archivo: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 }

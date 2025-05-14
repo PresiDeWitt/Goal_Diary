@@ -99,6 +99,11 @@ public class ProcesadorEstudiantes {
      * @throws IOException Si ocurre un error al leer o escribir los archivos
      */
     public static void procesarArchivo(String archivoEntrada, String archivoSalida) throws IOException {
+        File archivo = new File(archivoEntrada);
+        if (!archivo.exists()) {
+            throw new IOException("El archivo de entrada no existe: " + archivoEntrada);
+        }
+
         List<Estudiante> estudiantes = leerArchivoEstudiantes(archivoEntrada);
 
         // Calcular estadísticas para cada estudiante
@@ -126,7 +131,10 @@ public class ProcesadorEstudiantes {
 
         try (BufferedReader br = new BufferedReader(new FileReader(archivoEntrada))) {
             String linea;
+            int numeroLinea = 0;
+
             while ((linea = br.readLine()) != null) {
+                numeroLinea++;
                 if (linea.trim().isEmpty()) {
                     continue; // Ignorar líneas vacías
                 }
@@ -144,13 +152,19 @@ public class ProcesadorEstudiantes {
                             double nota = Double.parseDouble(tokenizer.nextToken().trim());
                             estudiante.agregarNota(nota);
                         } catch (NumberFormatException e) {
-                            System.err.println("Error al convertir nota para estudiante " + nombre + ": " + e.getMessage());
+                            System.err.println("Error en línea " + numeroLinea + ": No se pudo convertir nota para estudiante " + nombre + " - " + e.getMessage());
                         }
                     }
 
                     estudiantes.add(estudiante);
+                } else {
+                    System.err.println("Error en línea " + numeroLinea + ": Formato incorrecto - " + linea);
                 }
             }
+        }
+
+        if (estudiantes.isEmpty()) {
+            System.out.println("Advertencia: No se encontraron datos de estudiantes en el archivo.");
         }
 
         return estudiantes;
@@ -196,19 +210,4 @@ public class ProcesadorEstudiantes {
         System.out.println("Total de estudiantes procesados: " + estudiantes.size());
     }
 
-    /**
-     * Método principal para probar la funcionalidad
-     */
-    public static void main(String[] args) {
-        String archivoEntrada = "datos_estudiantes.txt";
-        String archivoSalida = "resultados_estudiantes.txt";
-
-        try {
-            procesarArchivo(archivoEntrada, archivoSalida);
-            System.out.println("\nEl archivo de resultados ha sido generado exitosamente: " + archivoSalida);
-        } catch (IOException e) {
-            System.err.println("Error al procesar el archivo: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
 }
