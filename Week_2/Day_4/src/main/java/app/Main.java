@@ -14,7 +14,7 @@ public class Main {
         );
 
         DatabaseConfig configDestino = new DatabaseConfig(
-                "jdbc:mysql://localhost:3306/empresa_destino",
+                "jdbc:mysql://localhost:3306/empresa_origen",
                 "root",
                 DEFAULT_DB_PASSWORD
         );

@@ -24,7 +24,9 @@ public class MigracionService {
      */
     public MigracionResultado migrarUsuarios(Connection conn, List<UsuarioDay_2> usuarios) throws SQLException {
         MigracionResultado resultado = new MigracionResultado();
-        String sql = "INSERT INTO usuarios (id, nombre, email, fecha_nacimiento) VALUES (?, ?, ?, ?)";
+
+        // Actualizado para incluir el campo tipo_documento
+        String sql = "INSERT INTO usuarios (id, nombre, email, fecha_nacimiento, tipo_documento) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             for (UsuarioDay_2 usuario : usuarios) {
@@ -36,6 +38,9 @@ public class MigracionService {
                     // Convert LocalDate to java.sql.Date
                     pstmt.setDate(4, usuario.getFechaNacimiento() != null ?
                             Date.valueOf(usuario.getFechaNacimiento()) : null);
+
+                    // Agregar tipo_documento
+                    pstmt.setString(5, usuario.getTipoDocumento());
 
                     pstmt.executeUpdate();
                     resultado.incrementarInsertados();

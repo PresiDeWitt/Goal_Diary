@@ -13,25 +13,29 @@ public class UsuarioService {
 
     public List<UsuarioOracle> obtenerUsuariosOracle(Connection conn) throws SQLException {
         List<UsuarioOracle> usuarios = new ArrayList<>();
-        // Especificar esquema si es necesario: "SELECT ... FROM ESQUEMA.usuarios"
-        String sql = "SELECT id, nombre, apellido1, apellido2, documento, tipo_documento FROM usuarios";
+        // Corregido: Ahora usa el nombre correcto de la tabla USUARIOS_TEST y los campos correctos
+        String sql = "SELECT ID, NOMBRE, APELLIDO1, APELLIDO2, DNI, FECHA_NACIMIENTO FROM CIMDATA.USUARIOS_TEST";
 
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
+                // Adaptado para usar el campo DNI en lugar de documento y tipo_documento
+                // y pasamos null para tipo_documento ya que no existe en la tabla
                 usuarios.add(new UsuarioOracle(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido1"),
-                        rs.getString("apellido2"),
-                        rs.getString("documento"),
-                        rs.getString("tipo_documento")
+                        rs.getInt("ID"),
+                        rs.getString("NOMBRE"),
+                        rs.getString("APELLIDO1"),
+                        rs.getString("APELLIDO2"),
+                        rs.getString("DNI"),
+                        null // No hay tipo_documento en la tabla
                 ));
             }
         }
+        System.out.println("Usuarios obtenidos de Oracle: " + usuarios.size());
         return usuarios;
     }
+
     /**
      * Obtiene todos los usuarios de la base de datos.
      *
@@ -53,11 +57,11 @@ public class UsuarioService {
                 Date fechaNacimiento = rs.getDate("fecha_nacimiento");
                 LocalDate fechaNacimientoLocal = fechaNacimiento != null ? fechaNacimiento.toLocalDate() : null;
 
-                usuarios.add(new UsuarioDay_2(id, nombre, email, fechaNacimientoLocal));
+                usuarios.add(new UsuarioDay_2(id, nombre, email, fechaNacimientoLocal, null));
             }
         }
 
-        System.out.println("Usuarios obtenidos: " + usuarios.size());
+        System.out.println("Usuarios obtenidos de MySQL: " + usuarios.size());
         return usuarios;
     }
 
@@ -87,8 +91,9 @@ public class UsuarioService {
      * @return true si el usuario es válido, false en caso contrario
      */
     private boolean validarUsuario(UsuarioDay_2 usuario) {
-        if (usuario.getNombre() == null || usuario.getEmail() == null || usuario.getFechaNacimiento() == null) {
-            System.out.println("Usuario con ID " + usuario.getId() + " rechazado: campos nulos");
+        // Modificado para adaptarse a la estructura actual (fecha_nacimiento puede ser null)
+        if (usuario.getNombre() == null || usuario.getEmail() == null) {
+            System.out.println("Usuario con ID " + usuario.getId() + " rechazado: campos nombre o email nulos");
             return false;
         }
 

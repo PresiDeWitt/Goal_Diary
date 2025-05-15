@@ -13,7 +13,7 @@ public class UsuarioDay_2 {
     private String nombre;
     private String email;
     private LocalDate fechaNacimiento;
-
+    private String tipoDocumento;
     // Constructores
     public UsuarioDay_2() {}
 
@@ -23,8 +23,23 @@ public class UsuarioDay_2 {
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
     }
+    // Constructor actualizado para incluir tipoDocumento
+    public UsuarioDay_2(int id, String nombre, String email, LocalDate fechaNacimiento, String tipoDocumento) {
+        this.id = id;
+        this.nombre = nombre;
+        this.email = email;
+        this.fechaNacimiento = fechaNacimiento;
+        this.tipoDocumento = tipoDocumento;
+    }
 
     public UsuarioDay_2(int id, String nombreCompleto, String s, Object o, String tipoDocumento) {
+    }
+
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
     // Getters y setters
