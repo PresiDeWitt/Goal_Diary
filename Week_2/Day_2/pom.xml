@@ -10,10 +10,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Day_1</artifactId>
-            <!-- La versión se hereda de dependencyManagement -->
-        </dependency>
+    <!-- Hereda automáticamente las dependencias de Week_2 -->
     </dependencies>
 </project>
