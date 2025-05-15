@@ -1,6 +1,6 @@
 package app;
 
-import dao.UsuarioDAO;
+
 import model.Usuario;
 import validator.UsuarioValidator;
 import validator.UsuarioValidatorDB;
@@ -9,12 +9,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import dao.UsuarioDAO;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("=== SISTEMA DE GESTIÓN DE USUARIOS ===");
+        System.out.println("=== VALIDACIÓN DE USUARIOS ===");
 
-        // Mostrar menú de opciones
-        mostrarMenu();
+        // Crear o verificar la tabla
+        UsuarioDAO.crearTablaUsuarios();
+
+        // Asegurarse de que la columna fecha_nacimiento existe (opcional)
+        UsuarioDAO.agregarColumnaFechaNacimiento();
+
+        // Resto del código...
     }
 
     private static void mostrarMenu() {
@@ -58,7 +65,7 @@ public class Main {
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
         // Crear la tabla de usuarios si no existe
-        boolean tablaCreada = usuarioDAO.crearTablaUsuarios();
+        boolean tablaCreada = UsuarioDAO.crearTablaUsuarios();
         if (tablaCreada) {
             System.out.println("Tabla de usuarios disponible para su uso");
         } else {
@@ -113,4 +120,5 @@ public class Main {
         UsuarioValidatorDB validador = new UsuarioValidatorDB();
         validador.generarReporteValidacion();
     }
+
 }

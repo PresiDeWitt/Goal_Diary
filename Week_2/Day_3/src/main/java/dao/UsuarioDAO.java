@@ -158,25 +158,51 @@ public class UsuarioDAO {
 
     /**
      * Método para crear la tabla de usuarios si no existe
+     *
      * @return true si la tabla fue creada o ya existía, false en caso de error
      */
-    public boolean crearTablaUsuarios() {
+    public static boolean crearTablaUsuarios() {
         String sql = "CREATE TABLE IF NOT EXISTS usuarios (" +
                 "id INT PRIMARY KEY," +
                 "nombre VARCHAR(100) NOT NULL," +
                 "email VARCHAR(100) NOT NULL," +
-                "fecha_nacimiento DATE NOT NULL" +
-                ")";
+                "fecha_nacimiento DATE NOT NULL," +
+                "fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement()) {
-
             stmt.execute(sql);
-            return true;
+            System.out.println("Tabla 'usuarios' creada o verificada con éxito.");
+        } catch (SQLException e) {
+            System.err.println("Error al crear la tabla: " + e.getMessage());
+        }
+        return false;
+    }
+
+    public static void agregarColumnaFechaNacimiento() {
+        // Primero verificamos si la columna ya existe
+        String checkColumnSql = "SELECT COUNT(*) FROM information_schema.columns " +
+                "WHERE table_schema = DATABASE() " +
+                "AND table_name = 'usuarios' " +
+                "AND column_name = 'fecha_nacimiento'";
+
+        String alterTableSql = "ALTER TABLE usuarios ADD COLUMN fecha_nacimiento DATE NOT NULL";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(checkColumnSql)) {
+
+            // Verificar si la columna existe
+            if (rs.next() && rs.getInt(1) == 0) {
+                // La columna no existe, la añadimos
+                stmt.executeUpdate(alterTableSql);
+                System.out.println("Columna 'fecha_nacimiento' añadida correctamente.");
+            } else {
+                System.out.println("Columna 'fecha_nacimiento' ya existe.");
+            }
 
         } catch (SQLException e) {
-            System.err.println("Error al crear tabla de usuarios: " + e.getMessage());
-            return false;
+            System.err.println("Error al verificar/añadir columna fecha_nacimiento: " + e.getMessage());
         }
     }
 }
