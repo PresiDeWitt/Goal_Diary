@@ -9,11 +9,51 @@
     <artifactId>Day_4</artifactId>
     <packaging>jar</packaging>
 
-    <!-- Opcional: Dependencias específicas -->
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <ojdbc.version>19.20.0.0</ojdbc.version>
+        <mysql.version>8.0.28</mysql.version>
+    </properties>
+
     <dependencies>
+        <!-- Dependencias internas -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>Day_3</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>Day_2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Drivers de bases de datos -->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc10</artifactId>
+            <version>${ojdbc.version}</version>
+        </dependency>
+
+
+        <!-- Otras dependencias útiles -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

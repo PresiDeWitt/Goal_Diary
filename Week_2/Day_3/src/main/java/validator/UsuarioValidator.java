@@ -1,5 +1,5 @@
 package validator;
-import model.Usuario;
+import model.UsuarioDay_2;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
@@ -11,7 +11,7 @@ public class UsuarioValidator {
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-    public static boolean validarUsuario(Usuario usuario) {
+    public static boolean validarUsuario(UsuarioDay_2 usuario) {
         // Validar email
         if (!validarEmail(usuario.getEmail())) {
             System.out.println("Usuario " + usuario.getNombre() + " rechazado: Email inválido");

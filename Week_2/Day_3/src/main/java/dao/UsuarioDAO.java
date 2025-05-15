@@ -1,7 +1,7 @@
 package dao;
 
 import config.DatabaseConnection;
-import model.Usuario;
+import model.UsuarioDay_2;
 import validator.UsuarioValidator;
 
 import java.sql.*;
@@ -19,7 +19,7 @@ public class UsuarioDAO {
      * @param usuario Usuario a guardar
      * @return true si el usuario fue guardado correctamente, false en caso contrario
      */
-    public boolean guardarUsuarioSinValidar(Usuario usuario) {
+    public boolean guardarUsuarioSinValidar(UsuarioDay_2 usuario) {
         // Lo guardamos en la base de datos sin validación
         String sql = "INSERT INTO usuarios (id, nombre, email, fecha_nacimiento) VALUES (?, ?, ?, ?)";
 
@@ -51,7 +51,7 @@ public class UsuarioDAO {
      * @param usuario Usuario a guardar
      * @return true si el usuario fue guardado correctamente, false en caso contrario
      */
-    public boolean guardarUsuario(Usuario usuario) {
+    public boolean guardarUsuario(UsuarioDay_2 usuario) {
         // Primero validamos el usuario (pero solo informamos, no bloqueamos la inserción)
         boolean esValido = UsuarioValidator.validarUsuario(usuario);
 
@@ -63,8 +63,8 @@ public class UsuarioDAO {
      * Obtiene todos los usuarios de la base de datos
      * @return Lista de usuarios
      */
-    public List<Usuario> obtenerTodosLosUsuarios() {
-        List<Usuario> usuarios = new ArrayList<>();
+    public List<UsuarioDay_2> obtenerTodosLosUsuarios() {
+        List<UsuarioDay_2> usuarios = new ArrayList<>();
         String sql = "SELECT id, nombre, email, fecha_nacimiento FROM usuarios";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -83,7 +83,7 @@ public class UsuarioDAO {
                     fechaNacimiento = fechaSQL.toLocalDate();
                 }
 
-                Usuario usuario = new Usuario(id, nombre, email, fechaNacimiento);
+                UsuarioDay_2 usuario = new UsuarioDay_2(id, nombre, email, fechaNacimiento);
                 usuarios.add(usuario);
             }
 
@@ -99,7 +99,7 @@ public class UsuarioDAO {
      * @param id ID del usuario
      * @return Usuario encontrado o null si no existe
      */
-    public Usuario obtenerUsuarioPorId(int id) {
+    public UsuarioDay_2 obtenerUsuarioPorId(int id) {
         String sql = "SELECT id, nombre, email, fecha_nacimiento FROM usuarios WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -119,7 +119,7 @@ public class UsuarioDAO {
                         fechaNacimiento = fechaSQL.toLocalDate();
                     }
 
-                    return new Usuario(id, nombre, email, fechaNacimiento);
+                    return new UsuarioDay_2(id, nombre, email, fechaNacimiento);
                 }
             }
 
@@ -135,7 +135,7 @@ public class UsuarioDAO {
      * @param usuario Usuario a actualizar
      * @return true si el usuario fue actualizado correctamente, false en caso contrario
      */
-    public boolean actualizarUsuario(Usuario usuario) {
+    public boolean actualizarUsuario(UsuarioDay_2 usuario) {
         // Validamos el usuario, pero solo reportamos el resultado
         UsuarioValidator.validarUsuario(usuario);
 

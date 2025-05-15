@@ -4,7 +4,7 @@ import dao.IUsuarioDAO;
 import dao.UsuarioDAO;
 import etl.ProcesadorEstudiantes;
 import etl.ProcesadorEstudiantesAvanzado;
-import model.Usuario;
+import model.UsuarioDay_2;
 import service.UsuarioServicio;
 
 import java.util.List;
@@ -44,7 +44,7 @@ public class Main {
 
             // Limpiar y validar usuarios
             System.out.println("\nProceso de limpieza y validación:");
-            List<Usuario> usuariosLimpios = servicio.limpiarYValidarUsuarios();
+            List<UsuarioDay_2> usuariosLimpios = servicio.limpiarYValidarUsuarios();
 
             // Mostrar resumen
             System.out.println("\nResumen:");

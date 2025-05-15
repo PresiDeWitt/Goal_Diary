@@ -5,18 +5,19 @@ package model;
  * Corresponde a la capa de modelo en la arquitectura en capas.
  */
 
+import java.sql.Date;
 import java.time.LocalDate;
 
-public class Usuario {
+public class UsuarioDay_2 {
     private int id;
     private String nombre;
     private String email;
     private LocalDate fechaNacimiento;
 
     // Constructores
-    public Usuario() {}
+    public UsuarioDay_2() {}
 
-    public Usuario(int id, String nombre, String email, LocalDate fechaNacimiento) {
+    public UsuarioDay_2(int id, String nombre, String email, LocalDate fechaNacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
@@ -29,12 +30,16 @@ public class Usuario {
     }
 
     public void setFechaNacimiento(LocalDate fechaNacimiento) {
+
         this.fechaNacimiento = fechaNacimiento;
     }
 
     // Resto de getters y setters...
     // Getters y setters
+    //fechaNacimiento
 
+
+    // Otros atributos
     public int getId() {
         return id;
     }

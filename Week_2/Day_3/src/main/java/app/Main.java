@@ -1,6 +1,6 @@
 package app;
 
-import model.Usuario;
+import model.UsuarioDay_2;
 import validator.UsuarioValidator;
 import validator.UsuarioValidatorDB;
 import dao.UsuarioDAO;
@@ -63,22 +63,22 @@ public class Main {
         }
 
         //Array para guardar usuarios en la base de datos
-        List<Usuario> usuarios = new ArrayList<>();
-        usuarios.add(new Usuario(1, "Juan", "juan@example.com",
+        List<UsuarioDay_2> usuarios = new ArrayList<>();
+        usuarios.add(new UsuarioDay_2(1, "Juan", "juan@example.com",
                 UsuarioValidator.parseFecha("1990-05-15")));
-        usuarios.add(new Usuario(2, "María", "maria@example.com",
+        usuarios.add(new UsuarioDay_2(2, "María", "maria@example.com",
                 UsuarioValidator.parseFecha("2010-08-20")));
-        usuarios.add(new Usuario(3, "Pedro", "pedro@malformado",
+        usuarios.add(new UsuarioDay_2(3, "Pedro", "pedro@malformado",
                 UsuarioValidator.parseFecha("1985-11-30")));
-        usuarios.add(new Usuario(4, "Ana", "ana@example.com",
+        usuarios.add(new UsuarioDay_2(4, "Ana", "ana@example.com",
                 UsuarioValidator.parseFecha("2005-03-10")));
-        usuarios.add(new Usuario(5, "Carlos", "carlos@example.com",
+        usuarios.add(new UsuarioDay_2(5, "Carlos", "carlos@example.com",
                 UsuarioValidator.parseFecha("1995-12-25")));
 
         System.out.println("\n=== VALIDACIÓN Y ALMACENAMIENTO DE USUARIOS ===");
 
         // Almacenamos todos los usuarios en la base de datos, válidos o no
-        for (Usuario usuario : usuarios) {
+        for (UsuarioDay_2 usuario : usuarios) {
             // Validar el usuario (solo para mostrar información)
             boolean esValido = UsuarioValidator.validarUsuario(usuario);
 

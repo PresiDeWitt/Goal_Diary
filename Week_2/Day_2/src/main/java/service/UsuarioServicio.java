@@ -1,7 +1,7 @@
 package service;
 
 import dao.IUsuarioDAO;
-import model.Usuario;
+import model.UsuarioDay_2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class UsuarioServicio {
      * Método que obtiene y muestra la lista de todos los usuarios
      */
     public void mostrarUsuarios() {
-        List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
+        List<UsuarioDay_2> usuarios = usuarioDAO.getAllUsuarios();
 
         if (usuarios.isEmpty()) {
             System.out.println("No se encontraron usuarios en la base de datos.");
@@ -35,7 +35,7 @@ public class UsuarioServicio {
         }
 
         System.out.println("==== LISTA DE USUARIOS ====");
-        for (Usuario usuario : usuarios) {
+        for (UsuarioDay_2 usuario : usuarios) {
             System.out.println(usuario);
         }
         System.out.println("==========================");
@@ -46,7 +46,7 @@ public class UsuarioServicio {
      *
      * @return Lista de usuarios
      */
-    public List<Usuario> obtenerUsuarios() {
+    public List<UsuarioDay_2> obtenerUsuarios() {
         return usuarioDAO.getAllUsuarios();
     }
 
@@ -56,12 +56,12 @@ public class UsuarioServicio {
      * - Convierte los correos electrónicos a minúsculas con toLowerCase()
      * - Valida que tanto el nombre como el email no sean null ni estén vacíos
      */
-    public List<Usuario> limpiarYValidarUsuarios() {
-        List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
-        List<Usuario> usuariosLimpios = new ArrayList<>();
+    public List<UsuarioDay_2> limpiarYValidarUsuarios() {
+        List<UsuarioDay_2> usuarios = usuarioDAO.getAllUsuarios();
+        List<UsuarioDay_2> usuariosLimpios = new ArrayList<>();
 
         System.out.println("==== LIMPIEZA Y VALIDACIÓN DE USUARIOS ====");
-        for (Usuario usuario : usuarios) {
+        for (UsuarioDay_2 usuario : usuarios) {
             boolean esValido = true;
 
             String nombreMostrar = (usuario.getNombre() != null) ? usuario.getNombre() : "null";

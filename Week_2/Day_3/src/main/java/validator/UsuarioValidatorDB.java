@@ -1,8 +1,7 @@
 package validator;
 
 import config.DatabaseConnection;
-import model.Usuario;
-import validator.UsuarioValidator;
+import model.UsuarioDay_2;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -42,7 +41,7 @@ public class UsuarioValidatorDB {
                 }
 
                 // Crear usuario
-                Usuario usuario = new Usuario(id, nombre, email, fechaNacimiento);
+                UsuarioDay_2 usuario = new UsuarioDay_2(id, nombre, email, fechaNacimiento);
 
                 // Silenciar la salida por consola durante la validación
                 boolean esValido = silenciarYValidar(usuario);
@@ -78,7 +77,7 @@ public class UsuarioValidatorDB {
      * @param usuario Usuario a validar
      * @return Resultado de la validación
      */
-    private boolean silenciarYValidar(Usuario usuario) {
+    private boolean silenciarYValidar(UsuarioDay_2 usuario) {
         boolean emailValido = UsuarioValidator.validarEmail(usuario.getEmail());
         boolean edadValida = UsuarioValidator.validarEdad(usuario.getFechaNacimiento());
         return emailValido && edadValida;
@@ -103,7 +102,7 @@ public class UsuarioValidatorDB {
 
         System.out.println("\n----- DETALLE DE VALIDACIÓN -----");
         for (ResultadoValidacion resultado : resultados) {
-            Usuario u = resultado.getUsuario();
+            UsuarioDay_2 u = resultado.getUsuario();
             if (resultado.isValido()) {
                 usuariosValidos++;
                 System.out.println("VÁLIDO - ID: " + u.getId() + ", Nombre: " + u.getNombre() +
@@ -130,17 +129,17 @@ public class UsuarioValidatorDB {
      * Clase interna para almacenar el resultado de una validación
      */
     public static class ResultadoValidacion {
-        private Usuario usuario;
+        private UsuarioDay_2 usuario;
         private boolean valido;
         private String motivo;
 
-        public ResultadoValidacion(Usuario usuario, boolean valido, String motivo) {
+        public ResultadoValidacion(UsuarioDay_2 usuario, boolean valido, String motivo) {
             this.usuario = usuario;
             this.valido = valido;
             this.motivo = motivo;
         }
 
-        public Usuario getUsuario() {
+        public UsuarioDay_2 getUsuario() {
             return usuario;
         }
 

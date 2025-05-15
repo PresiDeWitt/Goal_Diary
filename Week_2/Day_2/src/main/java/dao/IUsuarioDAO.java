@@ -1,6 +1,6 @@
 package dao;
 
-import model.Usuario;
+import model.UsuarioDay_2;
 import java.util.List;
 
 /**
@@ -12,14 +12,14 @@ public interface IUsuarioDAO {
      * Obtiene todos los usuarios de la base de datos
      * @return Lista de usuarios
      */
-    List<Usuario> getAllUsuarios();
+    List<UsuarioDay_2> getAllUsuarios();
 
     /**
      * Obtiene un usuario por su ID
      * @param id ID del usuario
      * @return Usuario encontrado o null si no existe
      */
-    Usuario getUsuarioById(int id);
+    UsuarioDay_2 getUsuarioById(int id);
 
     /**
      * Inserta un nuevo usuario en la base de datos
@@ -27,7 +27,7 @@ public interface IUsuarioDAO {
      * @param usuario Usuario a insertar
      * @return true si se insertó correctamente, false en caso contrario
      */
-    int insertUsuario(Usuario usuario);
+    int insertUsuario(UsuarioDay_2 usuario);
 
     /**
      * Actualiza un usuario existente en la base de datos
@@ -35,7 +35,7 @@ public interface IUsuarioDAO {
      * @param usuario Usuario con los datos actualizados
      * @return true si se actualizó correctamente, false en caso contrario
      */
-    int updateUsuario(Usuario usuario);
+    int updateUsuario(UsuarioDay_2 usuario);
 
     /**
      * Elimina un usuario de la base de datos

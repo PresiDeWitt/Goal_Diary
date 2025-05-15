@@ -1,7 +1,7 @@
 package dao;
 
 import config.DatabaseConnection;
-import model.Usuario;
+import model.UsuarioDay_2;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import java.util.List;
 public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
-    public List<Usuario> getAllUsuarios() {
-        List<Usuario> usuarios = new ArrayList<>();
+    public List<UsuarioDay_2> getAllUsuarios() {
+        List<UsuarioDay_2> usuarios = new ArrayList<>();
         String query = "SELECT id, nombre, email FROM usuarios";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -19,7 +19,7 @@ public class UsuarioDAO implements IUsuarioDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Usuario usuario = new Usuario();
+                UsuarioDay_2 usuario = new UsuarioDay_2();
                 usuario.setId(rs.getInt("id"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setEmail(rs.getString("email"));
@@ -36,9 +36,9 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public Usuario getUsuarioById(int id) {
+    public UsuarioDay_2 getUsuarioById(int id) {
         String query = "SELECT id, nombre, email FROM usuarios WHERE id = ?";
-        Usuario usuario = null;
+        UsuarioDay_2 usuario = null;
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -46,7 +46,7 @@ public class UsuarioDAO implements IUsuarioDAO {
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    usuario = new Usuario();
+                    usuario = new UsuarioDay_2();
                     usuario.setId(rs.getInt("id"));
                     usuario.setNombre(rs.getString("nombre"));
                     usuario.setEmail(rs.getString("email"));
@@ -62,7 +62,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public int insertUsuario(Usuario usuario) {
+    public int insertUsuario(UsuarioDay_2 usuario) {
         String query = "INSERT INTO usuarios(nombre, email) VALUES(?, ?)";
         int generatedId = -1;
 
@@ -90,7 +90,7 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public int updateUsuario(Usuario usuario) {
+    public int updateUsuario(UsuarioDay_2 usuario) {
         String query = "UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?";
         int affectedRows = 0;
 
