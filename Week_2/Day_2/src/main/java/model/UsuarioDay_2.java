@@ -24,6 +24,9 @@ public class UsuarioDay_2 {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public UsuarioDay_2(int id, String nombreCompleto, String s, Object o, String tipoDocumento) {
+    }
+
     // Getters y setters
     public LocalDate getFechaNacimiento() {
         return fechaNacimiento;

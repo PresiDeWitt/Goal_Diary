@@ -1,22 +1,42 @@
 package services;
 
 import model.UsuarioDay_2;
+import model.UsuarioOracle;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Servicio para operaciones relacionadas con usuarios.
- * Proporciona métodos para obtener y validar usuarios desde una base de datos.
- */
+
 public class UsuarioService {
 
+    public List<UsuarioOracle> obtenerUsuariosOracle(Connection conn) throws SQLException {
+        List<UsuarioOracle> usuarios = new ArrayList<>();
+        // Especificar esquema si es necesario: "SELECT ... FROM ESQUEMA.usuarios"
+        String sql = "SELECT id, nombre, apellido1, apellido2, documento, tipo_documento FROM usuarios";
+
+        try (Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                usuarios.add(new UsuarioOracle(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido1"),
+                        rs.getString("apellido2"),
+                        rs.getString("documento"),
+                        rs.getString("tipo_documento")
+                ));
+            }
+        }
+        return usuarios;
+    }
     /**
-     * Obtiene todos los usuarios desde la base de datos.
+     * Obtiene todos los usuarios de la base de datos.
      *
      * @param conn Conexión a la base de datos
-     * @return Lista de usuarios
+     * @return Lista de usuarios obtenidos
      * @throws SQLException Si ocurre un error al acceder a la base de datos
      */
     public List<UsuarioDay_2> obtenerUsuarios(Connection conn) throws SQLException {

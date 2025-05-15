@@ -1,24 +1,22 @@
 package migration;
 
 import config.DatabaseConfig;
+import migration.result.MigracionResultado;
 import model.UsuarioDay_2;
+import model.UsuarioOracle;
+import services.*;
 
 import java.sql.Connection;
-import migration.result.MigracionResultado;
-import services.DatabaseManager;
-import services.MigracionService;
-import services.ReporteService;
-import services.UsuarioService;
-
-
+import java.util.ArrayList;
 import java.util.List;
 
-public class Migracion{
+public class Migracion {
     private final DatabaseConfig configOrigen;
     private final DatabaseConfig configDestino;
     private final UsuarioService usuarioService;
     private final MigracionService migracionService;
     private final ReporteService reporteService;
+    private final TransformacionService transformacionService;
 
     public Migracion(DatabaseConfig configOrigen, DatabaseConfig configDestino) {
         this.configOrigen = configOrigen;
@@ -26,27 +24,30 @@ public class Migracion{
         this.usuarioService = new UsuarioService();
         this.migracionService = new MigracionService();
         this.reporteService = new ReporteService();
+        this.transformacionService = new TransformacionService();
     }
 
     public void ejecutarMigracion() {
-        try {
-            // Establecer conexiones
-            Connection connOrigen = DatabaseManager.conectar(configOrigen);
-            Connection connDestino = DatabaseManager.conectar(configDestino);
+        try (Connection connOrigen = DatabaseManager.conectar(configOrigen);
+             Connection connDestino = DatabaseManager.conectar(configDestino)) {
 
-            // Obtener y validar usuarios
-            List<UsuarioDay_2> usuarios = usuarioService.obtenerUsuarios(connOrigen);
-            List<UsuarioDay_2> usuariosValidos = usuarioService.validarUsuarios(usuarios);
+            // 1. Obtener usuarios de Oracle
+            List<UsuarioOracle> usuariosOracle = usuarioService.obtenerUsuariosOracle(connOrigen);
 
-            // Realizar migración
+            // 2. Transformar a estructura MySQL
+            List<UsuarioDay_2> usuariosTransformados = new ArrayList<>();
+            for (UsuarioOracle usuarioOracle : usuariosOracle) {
+                usuariosTransformados.add(transformacionService.transformarUsuario(usuarioOracle));
+            }
+
+            // 3. Validar usuarios
+            List<UsuarioDay_2> usuariosValidos = usuarioService.validarUsuarios(usuariosTransformados);
+
+            // 4. Migrar a MySQL
             MigracionResultado resultado = migracionService.migrarUsuarios(connDestino, usuariosValidos);
 
-            // Mostrar reporte
+            // 5. Reporte
             reporteService.mostrarReporte(resultado);
-
-            // Cerrar conexiones
-            DatabaseManager.cerrarConexion(connOrigen);
-            DatabaseManager.cerrarConexion(connDestino);
 
         } catch (Exception e) {
             System.err.println("Error en la migración: " + e.getMessage());
