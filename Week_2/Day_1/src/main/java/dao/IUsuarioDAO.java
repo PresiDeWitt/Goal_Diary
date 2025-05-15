@@ -1,6 +1,6 @@
 package dao;
 
-import model.Usuario;
+import model.UsuarioDay_1;
 import java.util.List;
 
 /**
@@ -14,5 +14,5 @@ public interface IUsuarioDAO {
      *
      * @return Lista de todos los usuarios encontrados
      */
-    List<Usuario> getAllUsuarios();
+    List<UsuarioDay_1> getAllUsuarios();
 }

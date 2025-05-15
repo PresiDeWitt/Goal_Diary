@@ -2,7 +2,7 @@ package dao;
 
 
 import config.DatabaseConnection;
-import model.Usuario;
+import model.UsuarioDay_1;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import java.util.List;
 public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
-    public List<Usuario> getAllUsuarios() {
-        List<Usuario> usuarios = new ArrayList<>();
+    public List<UsuarioDay_1> getAllUsuarios() {
+        List<UsuarioDay_1> usuarios = new ArrayList<>();
         String query = "SELECT id, nombre, email FROM usuarios";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -20,7 +20,7 @@ public class UsuarioDAO implements IUsuarioDAO {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Usuario usuario = new Usuario();
+                UsuarioDay_1 usuario = new UsuarioDay_1();
                 usuario.setId(rs.getInt("id"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setEmail(rs.getString("email"));

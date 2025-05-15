@@ -1,7 +1,7 @@
 package service;
 
 import dao.IUsuarioDAO;
-import model.Usuario;
+import model.UsuarioDay_1;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class UsuarioServicio {
      * Método que obtiene y muestra la lista de todos los usuarios
      */
     public void mostrarUsuarios() {
-        List<Usuario> usuarios = usuarioDAO.getAllUsuarios();
+        List<UsuarioDay_1> usuarios = usuarioDAO.getAllUsuarios();
 
         if (usuarios.isEmpty()) {
             System.out.println("No se encontraron usuarios en la base de datos.");
@@ -34,7 +34,7 @@ public class UsuarioServicio {
         }
 
         System.out.println("==== LISTA DE USUARIOS ====");
-        for (Usuario usuario : usuarios) {
+        for (UsuarioDay_1 usuario : usuarios) {
             System.out.println(usuario);
         }
         System.out.println("==========================");
@@ -45,7 +45,7 @@ public class UsuarioServicio {
      *
      * @return Lista de usuarios
      */
-    public List<Usuario> obtenerUsuarios() {
+    public List<UsuarioDay_1> obtenerUsuarios() {
         return usuarioDAO.getAllUsuarios();
     }
 }

@@ -4,7 +4,7 @@ package model;
  * Clase que representa la entidad Usuario en el sistema.
  * Corresponde a la capa de modelo en la arquitectura en capas.
  */
-public class Usuario {
+public class UsuarioDay_1 {
     private int id;
     private String nombre;
     private String email;
@@ -12,7 +12,7 @@ public class Usuario {
     /**
      * Constructor vacío
      */
-    public Usuario() {
+    public UsuarioDay_1() {
     }
 
     /**
@@ -22,7 +22,7 @@ public class Usuario {
      * @param nombre Nombre del usuario
      * @param email Correo electrónico del usuario
      */
-    public Usuario(int id, String nombre, String email) {
+    public UsuarioDay_1(int id, String nombre, String email) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
