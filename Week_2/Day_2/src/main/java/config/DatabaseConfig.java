@@ -3,7 +3,7 @@ package config;
 public class DatabaseConfig {
     public static final String DEFAULT_DB_URL = "jdbc:mysql://localhost:3306/tl_database";
     public static final String DEFAULT_DB_USER = "root";
-    public static final String DEFAULT_DB_PASSWORD = "Alejandro2004#";
+    public static final String DEFAULT_DB_PASSWORD = "password";
     public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private String dbUrl;
