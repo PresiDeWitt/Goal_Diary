@@ -44,8 +44,8 @@ public class UsuarioValidatorDB {
                 // Crear usuario
                 Usuario usuario = new Usuario(id, nombre, email, fechaNacimiento);
 
-                // Validar el usuario
-                boolean esValido = UsuarioValidator.validarUsuario(usuario);
+                // Silenciar la salida por consola durante la validación
+                boolean esValido = silenciarYValidar(usuario);
                 String motivo = "";
 
                 // Si no es válido, determinar la razón
@@ -61,7 +61,7 @@ public class UsuarioValidatorDB {
                     }
                 }
 
-                // Crear resultado de validación
+                // Crear resultado de validación y añadirlo incluso si no es válido
                 ResultadoValidacion resultado = new ResultadoValidacion(usuario, esValido, motivo);
                 resultados.add(resultado);
             }
@@ -74,10 +74,26 @@ public class UsuarioValidatorDB {
     }
 
     /**
+     * Valida un usuario sin imprimir mensajes en consola
+     * @param usuario Usuario a validar
+     * @return Resultado de la validación
+     */
+    private boolean silenciarYValidar(Usuario usuario) {
+        boolean emailValido = UsuarioValidator.validarEmail(usuario.getEmail());
+        boolean edadValida = UsuarioValidator.validarEdad(usuario.getFechaNacimiento());
+        return emailValido && edadValida;
+    }
+
+    /**
      * Genera un reporte detallado de la validación de usuarios
      */
     public void generarReporteValidacion() {
         List<ResultadoValidacion> resultados = leerYValidarUsuarios();
+
+        if (resultados.isEmpty()) {
+            System.out.println("No hay usuarios en la base de datos para validar.");
+            return;
+        }
 
         System.out.println("\n===== REPORTE DE VALIDACIÓN DE USUARIOS =====");
         System.out.println("Total de usuarios en base de datos: " + resultados.size());
@@ -90,13 +106,13 @@ public class UsuarioValidatorDB {
             Usuario u = resultado.getUsuario();
             if (resultado.isValido()) {
                 usuariosValidos++;
-                System.out.println("✓ VÁLIDO - ID: " + u.getId() + ", Nombre: " + u.getNombre() +
+                System.out.println("VÁLIDO - ID: " + u.getId() + ", Nombre: " + u.getNombre() +
                         ", Email: " + u.getEmail() + ", Edad: " +
                         (u.getFechaNacimiento() != null ? UsuarioValidator.calcularEdad(u.getFechaNacimiento()) : "N/A") +
                         " años");
             } else {
                 usuariosInvalidos++;
-                System.out.println("✗ INVÁLIDO - ID: " + u.getId() + ", Nombre: " + u.getNombre() +
+                System.out.println("INVÁLIDO - ID: " + u.getId() + ", Nombre: " + u.getNombre() +
                         ", Email: " + u.getEmail() + ", Fecha Nac.: " +
                         (u.getFechaNacimiento() != null ? u.getFechaNacimiento() : "N/A") +
                         " - Motivo: " + resultado.getMotivo());

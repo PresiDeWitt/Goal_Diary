@@ -11,9 +11,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.PresiDeWitt</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>Day_1</artifactId>
-            <version>${project.version}</version>
+            <!-- La versión se hereda de dependencyManagement -->
         </dependency>
     </dependencies>
 </project>

@@ -1,27 +1,20 @@
 package app;
 
-
 import model.Usuario;
 import validator.UsuarioValidator;
 import validator.UsuarioValidatorDB;
+import dao.UsuarioDAO;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import dao.UsuarioDAO;
-
 public class Main {
     public static void main(String[] args) {
         System.out.println("=== VALIDACIÓN DE USUARIOS ===");
 
-        // Crear o verificar la tabla
-        UsuarioDAO.crearTablaUsuarios();
-
-        // Asegurarse de que la columna fecha_nacimiento existe (opcional)
-        UsuarioDAO.agregarColumnaFechaNacimiento();
-
-        // Resto del código...
+        // Mostrar menú de opciones
+        mostrarMenu();
     }
 
     private static void mostrarMenu() {
@@ -30,7 +23,7 @@ public class Main {
 
         do {
             System.out.println("\nSeleccione una opción:");
-            System.out.println("1. Cargar y validar usuarios de prueba");
+            System.out.println("1. Cargar y validar usuarios");
             System.out.println("2. Validar usuarios existentes en la base de datos");
             System.out.println("3. Salir");
             System.out.print("Opción: ");
@@ -61,19 +54,15 @@ public class Main {
     }
 
     private static void cargarUsuariosPrueba() {
-        // Crear instancia del DAO
         UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-        // Crear la tabla de usuarios si no existe
         boolean tablaCreada = UsuarioDAO.crearTablaUsuarios();
-        if (tablaCreada) {
-            System.out.println("Tabla de usuarios disponible para su uso");
-        } else {
+        if (!tablaCreada) {
             System.out.println("Error al verificar la tabla de usuarios");
-            return; // Salir si no se puede crear la tabla
+            return;
         }
 
-        // Crear lista de usuarios de prueba con fechas de nacimiento
+        //Array para guardar usuarios en la base de datos
         List<Usuario> usuarios = new ArrayList<>();
         usuarios.add(new Usuario(1, "Juan", "juan@example.com",
                 UsuarioValidator.parseFecha("1990-05-15")));
@@ -87,31 +76,25 @@ public class Main {
                 UsuarioValidator.parseFecha("1995-12-25")));
 
         System.out.println("\n=== VALIDACIÓN Y ALMACENAMIENTO DE USUARIOS ===");
-        List<Usuario> usuariosValidos = new ArrayList<>();
-        List<Usuario> usuariosRechazados = new ArrayList<>();
 
+        // Almacenamos todos los usuarios en la base de datos, válidos o no
         for (Usuario usuario : usuarios) {
-            // Intentar guardar el usuario (incluye validación)
-            if (usuarioDAO.guardarUsuario(usuario)) {
-                usuariosValidos.add(usuario);
-                System.out.println("Usuario " + usuario.getNombre() + " guardado correctamente en la base de datos");
+            // Validar el usuario (solo para mostrar información)
+            boolean esValido = UsuarioValidator.validarUsuario(usuario);
+
+            // Guardar el usuario sin importar si es válido o no
+            boolean guardado = usuarioDAO.guardarUsuarioSinValidar(usuario);
+
+            if (guardado) {
+                System.out.println("Usuario " + usuario.getNombre() + " guardado en la base de datos" +
+                        (esValido ? " (válido)" : " (inválido)"));
             } else {
-                usuariosRechazados.add(usuario);
+                System.out.println("Error al guardar usuario " + usuario.getNombre() + " en la base de datos");
             }
         }
 
-        System.out.println("\n=== USUARIOS EN BASE DE DATOS ===");
-        List<Usuario> usuariosEnBD = usuarioDAO.obtenerTodosLosUsuarios();
-        for (Usuario u : usuariosEnBD) {
-            System.out.println("ID: " + u.getId() + ", Nombre: " + u.getNombre() +
-                    ", Email: " + u.getEmail() + ", Edad: " +
-                    UsuarioValidator.calcularEdad(u.getFechaNacimiento()) + " años");
-        }
-
         System.out.println("\n=== RESUMEN ===");
-        System.out.println("Total usuarios procesados: " + usuarios.size());
-        System.out.println("Usuarios válidos y guardados: " + usuariosValidos.size());
-        System.out.println("Usuarios rechazados: " + usuariosRechazados.size());
+        System.out.println("Total usuarios procesados y guardados: " + usuarios.size());
     }
 
     private static void validarUsuariosExistentes() {
@@ -120,5 +103,4 @@ public class Main {
         UsuarioValidatorDB validador = new UsuarioValidatorDB();
         validador.generarReporteValidacion();
     }
-
 }
