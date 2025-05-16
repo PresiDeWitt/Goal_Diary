@@ -10,11 +10,7 @@ import java.sql.Statement;
 
 public class OracleConnectionTest {
     public static void main(String[] args) {
-        DatabaseConfig configOracle = new DatabaseConfig(
-                "jdbc:oracle:thin:@//172.16.90.11:1521/XEPDB1",
-                "CIMDATA",
-                "ATADMIC"
-        );
+        DatabaseConfig configOracle = new DatabaseConfig("oracle");
 
         Connection conn = null;
         try {

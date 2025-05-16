@@ -208,7 +208,7 @@ public class ProcesadorEstudiantesAvanzado {
      */
     private void persistirEstudiantesEnBD(List<Estudiante> estudiantes) throws SQLException {
         // Obtener conexión a la base de datos
-        try (Connection conn = DatabaseConnection.getConnection()) {
+        try (Connection conn = DatabaseConnection.getConnection("mysql")) {
             // Verificar si existe la tabla, si no, crearla
             crearTablaEstudiantesSiNoExiste(conn);
 

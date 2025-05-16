@@ -1,4 +1,4 @@
-package services;
+package app;
 
 import config.DatabaseConfig;
 import java.sql.Connection;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class DatabaseManager {
     public static Connection conectar(DatabaseConfig config) throws SQLException {
         try {
-            Class.forName(DatabaseConfig.DRIVER);
+            Class.forName(config.getDbDriver());
         } catch (ClassNotFoundException e) {
             throw new SQLException("Driver JDBC no encontrado", e);
         }

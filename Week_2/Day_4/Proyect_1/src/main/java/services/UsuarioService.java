@@ -8,36 +8,37 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class UsuarioService {
 
     public List<UsuarioOracle> obtenerUsuariosOracle(Connection conn) throws SQLException {
         List<UsuarioOracle> usuarios = new ArrayList<>();
-        // Corregido: Ahora usa el nombre correcto de la tabla USUARIOS_TEST y los campos correctos
-        String sql = "SELECT ID, NOMBRE, APELLIDO1, APELLIDO2, DNI, FECHA_NACIMIENTO FROM CIMDATA.USUARIOS_TEST";
+
+        // Consulta modificada: eliminamos TIPO_DOCUMENTO que no existe en la tabla
+        String sql = "SELECT ID, NOMBRE, APELLIDO1, APELLIDO2, DNI FROM CIMDATA.USUARIOS_TEST";
 
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                // Adaptado para usar el campo DNI en lugar de documento y tipo_documento
-                // y pasamos null para tipo_documento ya que no existe en la tabla
                 usuarios.add(new UsuarioOracle(
                         rs.getInt("ID"),
                         rs.getString("NOMBRE"),
                         rs.getString("APELLIDO1"),
                         rs.getString("APELLIDO2"),
-                        rs.getString("DNI"),
-                        null // No hay tipo_documento en la tabla
+                        rs.getString("DNI")
                 ));
             }
+        } catch (SQLException e) {
+            System.err.println("Error al consultar usuarios de Oracle: " + e.getMessage());
+            throw e;
         }
+
         System.out.println("Usuarios obtenidos de Oracle: " + usuarios.size());
         return usuarios;
     }
 
     /**
-     * Obtiene todos los usuarios de la base de datos.
+     * Obtiene todos los usuarios de la base de datos MySQL.
      *
      * @param conn Conexión a la base de datos
      * @return Lista de usuarios obtenidos
@@ -45,7 +46,7 @@ public class UsuarioService {
      */
     public List<UsuarioDay_2> obtenerUsuarios(Connection conn) throws SQLException {
         List<UsuarioDay_2> usuarios = new ArrayList<>();
-        String sql = "SELECT id, nombre, email, fecha_nacimiento FROM usuarios";
+        String sql = "SELECT id, nombre, email, fecha_nacimiento, tipo_documento FROM usuarios";
 
         try (Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -55,9 +56,11 @@ public class UsuarioService {
                 String nombre = rs.getString("nombre");
                 String email = rs.getString("email");
                 Date fechaNacimiento = rs.getDate("fecha_nacimiento");
+                String tipoDocumento = rs.getString("tipo_documento");
+
                 LocalDate fechaNacimientoLocal = fechaNacimiento != null ? fechaNacimiento.toLocalDate() : null;
 
-                usuarios.add(new UsuarioDay_2(id, nombre, email, fechaNacimientoLocal, null));
+                usuarios.add(new UsuarioDay_2(id, nombre, email, fechaNacimientoLocal, tipoDocumento));
             }
         }
 
@@ -80,7 +83,7 @@ public class UsuarioService {
             }
         }
 
-        System.out.println("Usuarios válidos: " + usuariosValidos.size());
+        System.out.println("Usuarios válidos: " + usuariosValidos.size() + " de " + usuarios.size() + " procesados");
         return usuariosValidos;
     }
 

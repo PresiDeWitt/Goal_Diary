@@ -8,8 +8,4 @@
 
     <artifactId>Day_2</artifactId>
     <packaging>jar</packaging>
-
-    <dependencies>
-    <!-- Hereda automáticamente las dependencias de Week_2 -->
-    </dependencies>
 </project>

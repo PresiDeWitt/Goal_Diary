@@ -5,21 +5,14 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
-    static {
+
+    public static Connection getConnection(String tipoBD) throws SQLException {
+        DatabaseConfig config = new DatabaseConfig(tipoBD);
+
         try {
-            Class.forName(DatabaseConfig.DRIVER);
+            Class.forName(config.getDbDriver());
         } catch (ClassNotFoundException e) {
-            throw new ExceptionInInitializerError("Failed to load JDBC driver: " + e.getMessage());
-        }
-    }
-
-    public static Connection getConnection() throws SQLException {
-        return getConnection(new DatabaseConfig());
-    }
-
-    public static Connection getConnection(DatabaseConfig config) throws SQLException {
-        if (config == null) {
-            throw new IllegalArgumentException("DatabaseConfig cannot be null");
+            throw new RuntimeException("No se pudo cargar el driver JDBC: " + e.getMessage(), e);
         }
 
         try {
@@ -29,7 +22,7 @@ public class DatabaseConnection {
                     config.getDbPassword()
             );
         } catch (SQLException e) {
-            throw new SQLException("Failed to establish database connection: " + e.getMessage(), e);
+            throw new SQLException("Error al conectar con la base de datos: " + e.getMessage(), e);
         }
     }
 
@@ -38,7 +31,7 @@ public class DatabaseConnection {
             try {
                 connection.close();
             } catch (SQLException e) {
-                System.err.println("Error while closing connection: " + e.getMessage());
+                System.err.println("Error al cerrar la conexión: " + e.getMessage());
             }
         }
     }

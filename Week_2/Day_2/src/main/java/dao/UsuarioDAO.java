@@ -14,7 +14,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         List<UsuarioDay_2> usuarios = new ArrayList<>();
         String query = "SELECT id, nombre, email FROM usuarios";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 
@@ -40,7 +40,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         String query = "SELECT id, nombre, email FROM usuarios WHERE id = ?";
         UsuarioDay_2 usuario = null;
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, id);
@@ -66,7 +66,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         String query = "INSERT INTO usuarios(nombre, email) VALUES(?, ?)";
         int generatedId = -1;
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, usuario.getNombre());
@@ -94,7 +94,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         String query = "UPDATE usuarios SET nombre = ?, email = ? WHERE id = ?";
         int affectedRows = 0;
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, usuario.getNombre());
@@ -116,7 +116,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         String query = "DELETE FROM usuarios WHERE id = ?";
         boolean deleted = false;
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, id);

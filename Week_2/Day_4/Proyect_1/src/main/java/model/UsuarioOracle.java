@@ -1,6 +1,8 @@
 package model;
 
 
+import java.time.LocalDate;
+
 public class UsuarioOracle {
     // Getters...
 
@@ -10,16 +12,23 @@ public class UsuarioOracle {
     private String apellido2;
     private String documento;
     private String tipoDocumento;
+    private LocalDate fechaNacimiento;
 
     // Constructor, getters y setters
     public UsuarioOracle(int id, String nombre, String apellido1, String apellido2,
-                         String documento, String tipoDocumento) {
+                         String documento) {
         this.id = id;
         this.nombre = nombre;
         this.apellido1 = apellido1;
         this.apellido2 = apellido2;
         this.documento = documento;
-        this.tipoDocumento = tipoDocumento;
+    }
+
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
     }
     public int getId() {
         return id;

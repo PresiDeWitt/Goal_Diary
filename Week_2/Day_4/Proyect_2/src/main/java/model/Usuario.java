@@ -3,35 +3,23 @@ package model;
 import java.time.LocalDate;
 
 /**
- * Clase que representa la entidad Usuario en el sistema.
- * Corresponde a la capa de modelo en la arquitectura en capas.
+ * Clase que representa la entidad Usuario en el sistema
  */
-public class UsuarioDay_2 {
+public class Usuario {
     private int id;
     private String nombre;
     private String email;
     private LocalDate fechaNacimiento;
-    private String tipoDocumento;
 
     // Constructores
-    public UsuarioDay_2() {}
+    public Usuario() {}
 
-    public UsuarioDay_2(int id, String nombre, String email, LocalDate fechaNacimiento) {
+    public Usuario(int id, String nombre, String email, LocalDate fechaNacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
         this.fechaNacimiento = fechaNacimiento;
     }
-
-    // Constructor actualizado para incluir tipoDocumento
-    public UsuarioDay_2(int id, String nombre, String email, LocalDate fechaNacimiento, String tipoDocumento) {
-        this.id = id;
-        this.nombre = nombre;
-        this.email = email;
-        this.fechaNacimiento = fechaNacimiento;
-        this.tipoDocumento = tipoDocumento;
-    }
-
 
     // Getters y setters
     public int getId() {
@@ -66,18 +54,9 @@ public class UsuarioDay_2 {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public String getTipoDocumento() {
-        return tipoDocumento;
-    }
-
-    public void setTipoDocumento(String tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-
     @Override
     public String toString() {
         return "Usuario [id=" + id + ", nombre=" + nombre + ", email=" + email +
-                ", fechaNacimiento=" + fechaNacimiento +
-                ", tipoDocumento=" + tipoDocumento + "]";
+                ", fechaNacimiento=" + fechaNacimiento + "]";
     }
 }

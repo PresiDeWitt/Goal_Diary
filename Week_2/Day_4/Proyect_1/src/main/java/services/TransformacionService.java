@@ -4,11 +4,11 @@ import model.UsuarioDay_2;
 import model.UsuarioOracle;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class TransformacionService {
 
     public UsuarioDay_2 transformarUsuario(UsuarioOracle usuarioOracle) {
+        // Combinar nombre completo según los requisitos
         String nombreCompleto = String.format("%s %s %s",
                 usuarioOracle.getNombre(),
                 usuarioOracle.getApellido1(),
@@ -23,7 +23,7 @@ public class TransformacionService {
         // Generar el email basado en nombre y apellido
         String email = generarEmail(usuarioOracle);
 
-        // Crear y devolver el usuario transformado
+        // Crear y devolver el usuario transformado con el email generado
         return new UsuarioDay_2(
                 usuarioOracle.getId(),
                 nombreCompleto,

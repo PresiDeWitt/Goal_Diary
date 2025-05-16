@@ -21,7 +21,7 @@ public class UsuarioValidatorDB {
         List<ResultadoValidacion> resultados = new ArrayList<>();
         String sql = "SELECT id, nombre, email, fecha_nacimiento FROM usuarios";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 

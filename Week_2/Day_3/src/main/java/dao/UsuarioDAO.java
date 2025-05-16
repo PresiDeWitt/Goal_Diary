@@ -23,7 +23,7 @@ public class UsuarioDAO {
         // Lo guardamos en la base de datos sin validación
         String sql = "INSERT INTO usuarios (id, nombre, email, fecha_nacimiento) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, usuario.getId());
@@ -67,7 +67,7 @@ public class UsuarioDAO {
         List<UsuarioDay_2> usuarios = new ArrayList<>();
         String sql = "SELECT id, nombre, email, fecha_nacimiento FROM usuarios";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -102,7 +102,7 @@ public class UsuarioDAO {
     public UsuarioDay_2 obtenerUsuarioPorId(int id) {
         String sql = "SELECT id, nombre, email, fecha_nacimiento FROM usuarios WHERE id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -141,7 +141,7 @@ public class UsuarioDAO {
 
         String sql = "UPDATE usuarios SET nombre = ?, email = ?, fecha_nacimiento = ? WHERE id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, usuario.getNombre());
@@ -173,7 +173,7 @@ public class UsuarioDAO {
     public boolean eliminarUsuario(int id) {
         String sql = "DELETE FROM usuarios WHERE id = ?";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -204,7 +204,7 @@ public class UsuarioDAO {
                 "fecha_nacimiento DATE," +
                 "fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              Statement stmt = conn.createStatement()) {
             stmt.execute(dropSql);
             stmt.execute(createSql);
@@ -224,7 +224,7 @@ public class UsuarioDAO {
         // Primero añadir la columna permitiendo valores nulos
         String alterTableSql = "ALTER TABLE usuarios ADD COLUMN fecha_nacimiento DATE NULL";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql");
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(checkColumnSql)) {
 
