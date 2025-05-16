@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>io.github.PresiDeWitt</groupId>
+        <artifactId>Week_2</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>Day_5</artifactId>
+    <packaging>jar</packaging>
+    <dependencies>
+
+
+        <dependency>
+            <groupId>io.github.PresiDeWitt</groupId>
+            <artifactId>Day_2</artifactId>
+        </dependency>
+    </dependencies>
+</project>

@@ -7,7 +7,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Migracion {
+/**
+ * Implementación completa de migración de usuarios entre bases de datos
+ * utilizando el sistema de configuración DatabaseConnection
+ */
+public class MigracionCompleta {
 
     // Identificadores para los tipos de bases de datos en database.properties
     private static final String BD_ORIGEN = "mysql_origen";
@@ -32,13 +36,15 @@ public class Migracion {
             conexionDestino = DatabaseConnection.getConnection(BD_DESTINO);
             System.out.println("Conexión exitosa a la base de datos destino");
 
-            // 2. Obtener usuarios de la base de datos origen
-            List<Usuario> usuarios = obtenerUsuarios(conexionOrigen);
+            // 2. Obtener usuarios desde la base de datos origen
+            List<Usuario> usuarios = obtenerUsuariosOrigen(conexionOrigen);
             usuariosProcesados = usuarios.size();
 
-            // 3. Validar usuarios
+            // 3. Validar usuarios según reglas de negocio
+            validarUsuarios(usuarios);
+
+            // Contar usuarios inválidos
             for (Usuario usuario : usuarios) {
-                validarUsuario(usuario);
                 if (!usuario.isEsValido()) {
                     usuariosInvalidos++;
                 }
@@ -74,7 +80,7 @@ public class Migracion {
             System.err.println("Error de conexión con la base de datos: " + e.getMessage());
             erroresInesperados++;
         } finally {
-            // 5. Cerrar las conexiones utilizando el método proporcionado
+            // 5. Cerrar las conexiones
             DatabaseConnection.closeConnection(conexionOrigen);
             DatabaseConnection.closeConnection(conexionDestino);
         }
@@ -89,54 +95,43 @@ public class Migracion {
     }
 
     /**
-     * Obtiene usuarios desde la base de datos origen
+     * Obtiene todos los usuarios desde la base de datos origen
      */
-    private static List<Usuario> obtenerUsuarios(Connection conexion) {
+    private static List<Usuario> obtenerUsuariosOrigen(Connection conexion) throws SQLException {
         List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT id, nombre, email, fecha_nacimiento FROM usuarios";
 
-        try {
-            String sql = "SELECT id, nombre, email, fecha_nacimiento FROM usuarios";
+        try (Statement stmt = conexion.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
-            try (Statement stmt = conexion.createStatement();
-                 ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
+                String email = rs.getString("email");
+                LocalDate fechaNacimiento = rs.getDate("fecha_nacimiento") != null ?
+                        rs.getDate("fecha_nacimiento").toLocalDate() : null;
 
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String nombre = rs.getString("nombre");
-                    String email = rs.getString("email");
-                    LocalDate fechaNacimiento = rs.getDate("fecha_nacimiento") != null ?
-                            rs.getDate("fecha_nacimiento").toLocalDate() : null;
-
-                    Usuario usuario = new Usuario(id, nombre, email, fechaNacimiento);
-                    usuarios.add(usuario);
-                }
+                Usuario usuario = new Usuario(id, nombre, email, fechaNacimiento);
+                usuarios.add(usuario);
             }
-
-            System.out.println("Se obtuvieron " + usuarios.size() + " usuarios de la base de datos origen");
         } catch (SQLException e) {
-            System.err.println("Error al obtener usuarios de la base de datos origen: " + e.getMessage());
-
-            // En caso de error, creamos algunos usuarios de prueba como fallback
-            System.out.println("Utilizando datos de prueba como fallback...");
-            crearUsuariosPrueba(usuarios);
+            System.err.println("Error al obtener usuarios de origen: " + e.getMessage());
+            throw e;
         }
 
+        System.out.println("Se obtuvieron " + usuarios.size() + " usuarios de la base de datos origen");
         return usuarios;
     }
 
     /**
-     * Crea usuarios de prueba como fallback si hay error en la lectura de la BD
+     * Valida todos los usuarios según las reglas de negocio
      */
-    private static void crearUsuariosPrueba(List<Usuario> usuarios) {
-        usuarios.add(new Usuario(1, "Juan Pérez", "juan@example.com", LocalDate.of(1990, 5, 15)));
-        usuarios.add(new Usuario(2, "María López", "maria@example.com", LocalDate.of(1985, 8, 22)));
-        usuarios.add(new Usuario(3, "Carlos Gómez", "carlos@example.com", LocalDate.of(1995, 3, 10)));
-        usuarios.add(new Usuario(4, "Ana Martínez", "", LocalDate.of(1988, 12, 5))); // Email inválido
-        usuarios.add(new Usuario(5, "", "pedro@example.com", LocalDate.of(1992, 7, 18))); // Nombre inválido
-        usuarios.add(new Usuario(6, "Laura Sánchez", "laura@example.com", LocalDate.of(2000, 1, 30)));
-        usuarios.add(new Usuario(7, "Roberto Fernández", "roberto@example.com", LocalDate.of(1983, 9, 12)));
+    private static void validarUsuarios(List<Usuario> usuarios) {
+        for (Usuario usuario : usuarios) {
+            validarUsuario(usuario);
+        }
 
-        System.out.println("Se crearon " + usuarios.size() + " usuarios de prueba");
+        System.out.println("Validación de usuarios completada");
     }
 
     /**

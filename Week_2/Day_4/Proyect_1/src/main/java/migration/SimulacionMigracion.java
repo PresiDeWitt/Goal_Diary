@@ -7,10 +7,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Migracion {
+/**
+ * Clase que simula el proceso de migración con datos de prueba
+ * y manejo específico de duplicados, utilizando DatabaseConnection
+ */
+public class SimulacionMigracion {
 
-    // Identificadores para los tipos de bases de datos en database.properties
-    private static final String BD_ORIGEN = "mysql_origen";
+    // Identificador para la base de datos destino en database.properties
     private static final String BD_DESTINO = "mysql_destino";
 
     public static void main(String[] args) {
@@ -21,19 +24,15 @@ public class Migracion {
         int usuariosInvalidos = 0;
         int erroresInesperados = 0;
 
-        Connection conexionOrigen = null;
         Connection conexionDestino = null;
 
         try {
-            // 1. Establecer conexiones a ambas bases de datos usando DatabaseConnection
-            conexionOrigen = DatabaseConnection.getConnection(BD_ORIGEN);
-            System.out.println("Conexión exitosa a la base de datos origen");
-
+            // 1. Establecer conexión con la base de datos destino
             conexionDestino = DatabaseConnection.getConnection(BD_DESTINO);
             System.out.println("Conexión exitosa a la base de datos destino");
 
-            // 2. Obtener usuarios de la base de datos origen
-            List<Usuario> usuarios = obtenerUsuarios(conexionOrigen);
+            // 2. Crear lista de usuarios de prueba
+            List<Usuario> usuarios = crearUsuariosPrueba();
             usuariosProcesados = usuarios.size();
 
             // 3. Validar usuarios
@@ -44,7 +43,11 @@ public class Migracion {
                 }
             }
 
-            // 4. Insertar usuarios válidos en la base de datos destino
+            // 4. Insertar primero algunos usuarios que luego serán duplicados
+            // Esto simula que ya existen en la base de datos
+            insertarUsuariosPreexistentes(conexionDestino);
+
+            // 5. Insertar usuarios válidos en la base de datos destino
             for (Usuario usuario : usuarios) {
                 if (usuario.isEsValido()) {
                     try {
@@ -74,12 +77,11 @@ public class Migracion {
             System.err.println("Error de conexión con la base de datos: " + e.getMessage());
             erroresInesperados++;
         } finally {
-            // 5. Cerrar las conexiones utilizando el método proporcionado
-            DatabaseConnection.closeConnection(conexionOrigen);
+            // 6. Cerrar las conexiones
             DatabaseConnection.closeConnection(conexionDestino);
         }
 
-        // 6. Generar reporte final
+        // 7. Generar reporte final
         System.out.println("\n=== REPORTE DE MIGRACIÓN ===");
         System.out.println("Total de usuarios procesados: " + usuariosProcesados);
         System.out.println("Usuarios insertados: " + usuariosInsertados);
@@ -89,45 +91,12 @@ public class Migracion {
     }
 
     /**
-     * Obtiene usuarios desde la base de datos origen
+     * Crea una lista de usuarios de prueba
      */
-    private static List<Usuario> obtenerUsuarios(Connection conexion) {
+    private static List<Usuario> crearUsuariosPrueba() {
         List<Usuario> usuarios = new ArrayList<>();
 
-        try {
-            String sql = "SELECT id, nombre, email, fecha_nacimiento FROM usuarios";
-
-            try (Statement stmt = conexion.createStatement();
-                 ResultSet rs = stmt.executeQuery(sql)) {
-
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String nombre = rs.getString("nombre");
-                    String email = rs.getString("email");
-                    LocalDate fechaNacimiento = rs.getDate("fecha_nacimiento") != null ?
-                            rs.getDate("fecha_nacimiento").toLocalDate() : null;
-
-                    Usuario usuario = new Usuario(id, nombre, email, fechaNacimiento);
-                    usuarios.add(usuario);
-                }
-            }
-
-            System.out.println("Se obtuvieron " + usuarios.size() + " usuarios de la base de datos origen");
-        } catch (SQLException e) {
-            System.err.println("Error al obtener usuarios de la base de datos origen: " + e.getMessage());
-
-            // En caso de error, creamos algunos usuarios de prueba como fallback
-            System.out.println("Utilizando datos de prueba como fallback...");
-            crearUsuariosPrueba(usuarios);
-        }
-
-        return usuarios;
-    }
-
-    /**
-     * Crea usuarios de prueba como fallback si hay error en la lectura de la BD
-     */
-    private static void crearUsuariosPrueba(List<Usuario> usuarios) {
+        // Crear varios usuarios de prueba, algunos válidos y otros no
         usuarios.add(new Usuario(1, "Juan Pérez", "juan@example.com", LocalDate.of(1990, 5, 15)));
         usuarios.add(new Usuario(2, "María López", "maria@example.com", LocalDate.of(1985, 8, 22)));
         usuarios.add(new Usuario(3, "Carlos Gómez", "carlos@example.com", LocalDate.of(1995, 3, 10)));
@@ -137,6 +106,39 @@ public class Migracion {
         usuarios.add(new Usuario(7, "Roberto Fernández", "roberto@example.com", LocalDate.of(1983, 9, 12)));
 
         System.out.println("Se crearon " + usuarios.size() + " usuarios de prueba");
+        return usuarios;
+    }
+
+    /**
+     * Inserta usuarios que ya existen en la base de datos para simular duplicados
+     */
+    private static void insertarUsuariosPreexistentes(Connection conexion) throws SQLException {
+        // Primero limpiamos la tabla para evitar problemas con pruebas anteriores
+        try (Statement stmt = conexion.createStatement()) {
+            stmt.executeUpdate("DELETE FROM usuarios");
+            System.out.println("Tabla de usuarios limpiada para la simulación");
+        }
+
+        // Insertamos los usuarios 1 y 3 como preexistentes para simular duplicados
+        String sql = "INSERT INTO usuarios (id, nombre, email, fecha_nacimiento) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            // Usuario 1
+            stmt.setInt(1, 1);
+            stmt.setString(2, "Juan Pérez (Existente)");
+            stmt.setString(3, "juan@example.com");
+            stmt.setDate(4, Date.valueOf(LocalDate.of(1990, 5, 15)));
+            stmt.executeUpdate();
+
+            // Usuario 3
+            stmt.setInt(1, 3);
+            stmt.setString(2, "Carlos Gómez (Existente)");
+            stmt.setString(3, "carlos@example.com");
+            stmt.setDate(4, Date.valueOf(LocalDate.of(1995, 3, 10)));
+            stmt.executeUpdate();
+
+            System.out.println("Se insertaron 2 usuarios preexistentes (IDs: 1, 3)");
+        }
     }
 
     /**

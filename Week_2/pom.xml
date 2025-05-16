@@ -14,6 +14,7 @@
         <module>Day_2</module>
         <module>Day_3</module>
         <module>Day_4</module>
+        <module>Day_5</module>
     </modules>
 
     <!-- Propiedades y configuración de compilación -->

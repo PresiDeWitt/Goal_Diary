@@ -1,15 +1,10 @@
 package migration;
 
-import app.DatabaseManager;
 import config.DatabaseConfig;
 import migration.result.MigracionResultado;
 import model.UsuarioDay_2;
 import model.UsuarioOracle;
-import services.MigracionService;
-import services.ReporteService;
-import services.TransformacionService;
-
-import services.UsuarioService; // Si el paquete es completo
+import services.*;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -26,7 +21,7 @@ public class Migracion {
     public Migracion(DatabaseConfig configOrigen, DatabaseConfig configDestino) {
         this.configOrigen = configOrigen;
         this.configDestino = configDestino;
-        this.usuarioService = new UsuarioService(); // Ahora apunta al de Proyect_1
+        this.usuarioService = new UsuarioService();
         this.migracionService = new MigracionService();
         this.reporteService = new ReporteService();
         this.transformacionService = new TransformacionService();

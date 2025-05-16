@@ -1,4 +1,3 @@
-package test;
 
 import config.DatabaseConfig;
 import services.DatabaseManager;

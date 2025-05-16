@@ -7,7 +7,7 @@
     </parent>
 
     <artifactId>Proyect_1</artifactId>
-    <name>[Extra] Proyect_1</name>
+    <name>Proyect_1</name>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -24,6 +24,13 @@
             <artifactId>ojdbc11</artifactId>
             <version>21.7.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>io.github.PresiDeWitt</groupId>
+            <artifactId>Extra</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
 
     </dependencies>
 </project>

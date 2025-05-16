@@ -1,4 +1,3 @@
-package test;
 
 import config.DatabaseConnection;
 
@@ -13,7 +12,7 @@ public class MySQLConnectionTest {
         try {
             // Intento de conexión
             System.out.println("Conectando a MySQL...");
-            conn = DatabaseConnection.getConnection("mysql_destino");
+            conn = DatabaseConnection.getConnection("mysql_empresa_destino_proyecto_2");
             if (conn != null) {
                 System.out.println("Conexión exitosa a MySQL");
 

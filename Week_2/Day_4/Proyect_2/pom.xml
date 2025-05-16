@@ -6,8 +6,11 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Proyect_2</artifactId>
+    <artifactId>Extra</artifactId>
     <packaging>jar</packaging>
+    <name>[Extra] Proyect_2</name>
+    <description>Proyecto adicional con funcionalidades extra</description>  <!-- Opcional -->
+
 
     <dependencies>
         <dependency>
@@ -26,12 +29,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.github.PresiDeWitt</groupId>
-            <artifactId>Proyect_1</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
+
 
     </dependencies>
 </project>
