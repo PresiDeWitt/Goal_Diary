@@ -13,7 +13,7 @@ public class MySQLConnectionTest {
         try {
             // Intento de conexión
             System.out.println("Conectando a MySQL...");
-            conn = DatabaseConnection.getConnection("mysql");
+            conn = DatabaseConnection.getConnection("mysql_destino");
             if (conn != null) {
                 System.out.println("Conexión exitosa a MySQL");
 

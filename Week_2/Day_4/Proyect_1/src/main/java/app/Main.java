@@ -9,7 +9,7 @@ public class Main {
         DatabaseConfig configOrigen = new DatabaseConfig("oracle");
 
         // Configuración para MySQL (destino) desde .properties
-        DatabaseConfig configDestino = new DatabaseConfig("mysql");
+        DatabaseConfig configDestino = new DatabaseConfig("mysql_destino");
 
         // Iniciar el proceso de migración
         System.out.println("Iniciando proceso de migración de usuarios...");
