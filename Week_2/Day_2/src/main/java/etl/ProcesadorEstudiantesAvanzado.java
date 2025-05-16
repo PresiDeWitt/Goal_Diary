@@ -97,7 +97,7 @@ public class ProcesadorEstudiantesAvanzado {
      * @param archivoEntrada Ruta del archivo de entrada
      * @param archivoSalida Ruta del archivo de salida
      */
-    public void procesarArchivo(String archivoEntrada,String archivoSalida) {
+    public void procesarArchivo(String archivoEntrada, String archivoSalida) {
         try {
             List<Estudiante> estudiantes = leerArchivoEstudiantes(archivoEntrada);
 
@@ -207,8 +207,8 @@ public class ProcesadorEstudiantesAvanzado {
      * @throws SQLException Si ocurre un error al interactuar con la base de datos
      */
     private void persistirEstudiantesEnBD(List<Estudiante> estudiantes) throws SQLException {
-        // Obtener conexión a la base de datos
-        try (Connection conn = DatabaseConnection.getConnection("mysql")) {
+        // Obtener conexión a la base de datos - usar mysql_tl en lugar de mysql
+        try (Connection conn = DatabaseConnection.getConnection("mysql_tl")) {
             // Verificar si existe la tabla, si no, crearla
             crearTablaEstudiantesSiNoExiste(conn);
 

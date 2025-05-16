@@ -1,6 +1,5 @@
 package dao;
 
-
 import config.DatabaseConnection;
 import model.UsuarioDay_1;
 
@@ -15,7 +14,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         List<UsuarioDay_1> usuarios = new ArrayList<>();
         String query = "SELECT id, nombre, email FROM usuarios";
 
-        try (Connection conn = DatabaseConnection.getConnection();
+        try (Connection conn = DatabaseConnection.getConnection("mysql_origen");
              PreparedStatement stmt = conn.prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {
 

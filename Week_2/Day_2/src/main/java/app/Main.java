@@ -7,6 +7,7 @@ import etl.ProcesadorEstudiantesAvanzado;
 import model.UsuarioDay_2;
 import service.UsuarioServicio;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -62,14 +63,26 @@ public class Main {
     private static void demostrarProcesamientoEstudiantes() {
         System.out.println("\n=== 2. PROCESAMIENTO DE DATOS DE ESTUDIANTES ===");
 
-        String archivoEntrada = "datos_estudiantes.txt";
-        String archivoSalida = "resultados_estudiantes_db.txt";
+        // Obtenemos la ruta absoluta al directorio de trabajo actual
+        String directorioActual = System.getProperty("user.dir");
+
+        // Construimos las rutas absolutas a los archivos
+        String archivoEntrada = directorioActual + File.separator + "datos_estudiantes.txt";
+        String archivoSalida = directorioActual + File.separator + "resultados_estudiantes.txt";
 
         System.out.println("Archivo de entrada: " + archivoEntrada);
         System.out.println("Archivo de salida: " + archivoSalida);
         System.out.println();
 
         try {
+            // Verificar si el archivo de entrada existe
+            File archivo = new File(archivoEntrada);
+            if (!archivo.exists()) {
+                System.err.println("ADVERTENCIA: El archivo de entrada no existe: " + archivoEntrada);
+                System.err.println("Por favor, cree el archivo 'datos_estudiantes.txt' en: " + directorioActual);
+                return;
+            }
+
             ProcesadorEstudiantes.procesarArchivo(archivoEntrada, archivoSalida);
             System.out.println("\nProcesamiento completado exitosamente.");
         } catch (Exception e) {
@@ -81,17 +94,31 @@ public class Main {
     /**
      * Demostración del procesamiento avanzado con persistencia
      */
-    //TODO: Arreglar el método de persistencia
     private static void demostrarProcesamientoAvanzado() {
         System.out.println("\n=== 3. PROCESAMIENTO AVANZADO CON PERSISTENCIA ===");
 
         try {
+            // Obtenemos la ruta absoluta al directorio de trabajo actual
+            String directorioActual = System.getProperty("user.dir");
+
+            // Construimos las rutas absolutas a los archivos
+            String archivoEntrada = directorioActual + File.separator + "datos_estudiantes.txt";
+            String archivoSalida = directorioActual + File.separator + "resultados_estudiantes_bd.txt";
+
+            // Verificar si el archivo de entrada existe
+            File archivo = new File(archivoEntrada);
+            if (!archivo.exists()) {
+                System.err.println("ADVERTENCIA: El archivo de entrada no existe: " + archivoEntrada);
+                System.err.println("Por favor, cree el archivo 'datos_estudiantes.txt' en: " + directorioActual);
+                return;
+            }
+
             // Crear una instancia del procesador avanzado
             ProcesadorEstudiantesAvanzado procesadorAvanzado = new ProcesadorEstudiantesAvanzado();
 
             // Procesar archivo con persistencia
             System.out.println("\nIniciando procesamiento del archivo con persistencia...");
-            procesadorAvanzado.procesarArchivo("datos_estudiantes.txt", "resultados_estudiantes_bd.txt");
+            procesadorAvanzado.procesarArchivo(archivoEntrada, archivoSalida);
 
         } catch (Exception e) {
             System.err.println("\nError durante el procesamiento avanzado: " + e.getMessage());

@@ -8,4 +8,8 @@
 
     <artifactId>Day_2</artifactId>
     <packaging>jar</packaging>
+    <dependencies>
+
+
+    </dependencies>
 </project>

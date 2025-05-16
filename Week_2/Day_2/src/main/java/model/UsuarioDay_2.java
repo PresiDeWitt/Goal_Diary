@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Clase que representa la entidad Usuario en el sistema.
@@ -73,6 +74,7 @@ public class UsuarioDay_2 {
     public void setTipoDocumento(String tipoDocumento) {
         this.tipoDocumento = tipoDocumento;
     }
+
 
     @Override
     public String toString() {
