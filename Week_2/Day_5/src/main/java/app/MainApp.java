@@ -34,7 +34,7 @@ public class MainApp {
             // Transferir usuarios de origen a destino
             boolean resultado = usuarioDAO.transferirUsuariosTransaccional();
 
-            System.out.println("Operación: " + (resultado ? "ÉXITO" : "FALLÓ"));
+            System.out.println("Operación: " + (resultado ? "ÉXITOSA" : "ABORTADA"));
 
         } catch (SQLException e) {
             System.err.println("Error: " + e.getMessage());
