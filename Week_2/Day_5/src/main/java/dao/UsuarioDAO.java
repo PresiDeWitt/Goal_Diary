@@ -1,74 +1,109 @@
+// UsuarioDAO.java
 package dao;
 
 import model.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDAO {
 
-    private Connection conn;
+    private Connection connOrigen;
+    private Connection connDestino;
 
-    public UsuarioDAO(Connection conn) {
-        this.conn = conn;
+    public UsuarioDAO(Connection connOrigen, Connection connDestino) {
+        this.connOrigen = connOrigen;
+        this.connDestino = connDestino;
     }
 
     /**
-     * Inserta una lista de usuarios en la base de datos utilizando transacciones
-     * @param listaUsuarios Lista de usuarios a insertar
+     * Transfiere usuarios de la base de datos origen a la destino de forma transaccional
      * @return true si la operación fue exitosa, false en caso contrario
      */
-    public boolean insertarUsuariosTransaccional(List<Usuario> listaUsuarios) {
-        PreparedStatement pstmt = null;
-        boolean exito = false;
+    public boolean transferirUsuariosTransaccional() {
         long inicio = System.currentTimeMillis();
-
-        System.out.println("Iniciando carga de " + listaUsuarios.size() + " usuarios...");
+        boolean exito = false;
 
         try {
-            conn.setAutoCommit(false);
-            String sql = "INSERT INTO usuarios (id, nombre, email, password) VALUES (?, ?, ?, ?)";
-            pstmt = conn.prepareStatement(sql);
+            // Desactivar autocommit en ambas conexiones
+            connOrigen.setAutoCommit(false);
+            connDestino.setAutoCommit(false);
 
-            for (Usuario u : listaUsuarios) {
-                try {
-                    pstmt.setInt(1, u.getId());
-                    pstmt.setString(2, u.getNombre());
-                    pstmt.setString(3, u.getEmail());
-                    pstmt.setString(4, u.getPassword());
-                    pstmt.executeUpdate();
-                } catch (SQLException e) {
-                    System.out.println("Error en usuario con ID " + u.getId() + ": " + e.getMessage().split("for key")[0]);
-                    throw e; // Forzar rollback
-                }
-            }
+            // Obtener usuarios de origen
+            List<Usuario> usuarios = obtenerUsuariosOrigen();
+            System.out.println("Iniciando transferencia de " + usuarios.size() + " usuarios...");
 
-            conn.commit();
+            // Insertar en destino
+            insertarUsuariosDestino(usuarios);
+
+            // Si va bien, hacer commit en ambas
+            connOrigen.commit();
+            connDestino.commit();
             System.out.println("Transacción completada exitosamente.");
             exito = true;
 
         } catch (SQLException e) {
             try {
-                if (conn != null) {
-                    conn.rollback();
-                    System.out.println("Rollback ejecutado. Ningún usuario fue insertado.");
-                }
+                // Rollback en ambas conexiones si hay error
+                if (connOrigen != null) connOrigen.rollback();
+                if (connDestino != null) connDestino.rollback();
+                System.out.println("Rollback ejecutado. Ningún usuario fue transferido. Error: " + e.getMessage());
             } catch (SQLException ex) {
                 System.out.println("Error al hacer rollback: " + ex.getMessage());
             }
         } finally {
             try {
-                if (conn != null) conn.setAutoCommit(true);
-                if (pstmt != null) pstmt.close();
+                if (connOrigen != null) connOrigen.setAutoCommit(true);
+                if (connDestino != null) connDestino.setAutoCommit(true);
             } catch (SQLException e) {
-                System.out.println("Error al cerrar recursos: " + e.getMessage());
+                System.out.println("Error al restaurar autocommit: " + e.getMessage());
             }
         }
 
         long fin = System.currentTimeMillis();
         System.out.println("Tiempo total: " + (fin - inicio) + " ms");
         return exito;
+    }
+
+    private List<Usuario> obtenerUsuariosOrigen() throws SQLException {
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT id, nombre, email, password FROM usuarios";
+
+        try (PreparedStatement pstmt = connOrigen.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                usuarios.add(new Usuario(
+                        rs.getInt("id"),
+                        rs.getString("nombre"),
+                        rs.getString("email"),
+                        rs.getString("password")
+                ));
+            }
+        }
+        return usuarios;
+    }
+
+    private void insertarUsuariosDestino(List<Usuario> usuarios) throws SQLException {
+        String sql = "INSERT INTO usuarios (id, nombre, email, password) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = connDestino.prepareStatement(sql)) {
+            for (Usuario u : usuarios) {
+                // Simular error para ID 4 (para probar rollback)
+                if (u.getId() == 4) {
+                    throw new SQLException("Error simulado para usuario con ID 4");
+                }
+
+                pstmt.setInt(1, u.getId());
+                pstmt.setString(2, u.getNombre());
+                pstmt.setString(3, u.getEmail());
+                pstmt.setString(4, u.getPassword());
+                pstmt.executeUpdate();
+            }
+        }
     }
 }
