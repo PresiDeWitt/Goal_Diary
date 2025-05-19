@@ -1,7 +1,8 @@
-package com.jsonreader.service;
+package service;
 
-import com.jsonreader.model.Post;
-import com.jsonreader.util.JsonParser;
+
+import model.Post;
+import util.JsonParser;
 
 import java.io.IOException;
 import java.util.List;
