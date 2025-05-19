@@ -1,10 +1,11 @@
 package app;
 
-import com.jsonreader.service.ApiService;
-import com.jsonreader.service.PostService;
-import com.jsonreader.util.GsonParser;
-import com.jsonreader.util.JacksonParser;
-import com.jsonreader.util.JsonParser;
+
+import service.ApiService;
+import service.PostService;
+import util.GsonParser;
+import util.JacksonParser;
+import util.JsonParser;
 
 import java.io.IOException;
 import java.util.Scanner;
