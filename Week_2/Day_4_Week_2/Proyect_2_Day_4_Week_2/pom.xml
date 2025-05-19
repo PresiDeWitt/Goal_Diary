@@ -6,9 +6,9 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Proyect_2_Day_4_Week_2</artifactId>
+    <artifactId>Extra</artifactId>
     <packaging>jar</packaging>
-    <name>[Extra] Proyect_2_Day_4_Week_2</name>
+    <name>Proyect_2_Day_4_Week_2 [Extra]</name>
     <description>Proyecto adicional con funcionalidades extra</description>  <!-- Opcional -->
 
 
