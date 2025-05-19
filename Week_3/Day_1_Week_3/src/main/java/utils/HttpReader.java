@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
-public class HttpReader {
+public class HttpReader  {
     /**
      * Lee el cuerpo de la respuesta HTTP
      * @param connection Conexión HTTP establecida
