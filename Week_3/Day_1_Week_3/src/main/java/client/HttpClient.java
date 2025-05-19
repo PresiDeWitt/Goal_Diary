@@ -25,7 +25,7 @@ public class HttpClient {
             URL url = new URL(urlString);
             connection = (HttpURLConnection) url.openConnection();
 
-            // Configurar método HTTP
+            // Configurar metodo HTTP
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(5000);
             connection.setReadTimeout(5000);
