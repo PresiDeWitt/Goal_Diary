@@ -6,14 +6,14 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>Day_5</artifactId>
+    <artifactId>Day_2_Week_2</artifactId>
     <packaging>jar</packaging>
     <dependencies>
 
-
-        <dependency>
-            <groupId>io.github.PresiDeWitt</groupId>
-            <artifactId>Day_2</artifactId>
-        </dependency>
     </dependencies>
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+    </properties>
 </project>

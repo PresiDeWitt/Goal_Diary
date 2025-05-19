@@ -1,7 +1,7 @@
 // UsuarioDAO.java
-package dao;
+package Day_5_Week_2.src.main.java.dao;
 
-import model.Usuario;
+import Day_5_Week_2.src.main.java.model.Usuario;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

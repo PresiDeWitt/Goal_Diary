@@ -1,4 +1,4 @@
-package model;
+package Day_5_Week_2.src.main.java.model;
 
 public class Usuario {
     private int id;

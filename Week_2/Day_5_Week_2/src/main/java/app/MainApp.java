@@ -1,13 +1,12 @@
 // MainApp.java
-package app;
+package Day_5_Week_2.src.main.java.app;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
-import manager.DatabaseManager;
-import dao.UsuarioDAO;
-import model.Usuario;
+
+import Day_5_Week_2.src.main.java.manager.DatabaseManager;
+import Day_5_Week_2.src.main.java.dao.UsuarioDAO;
 
 public class MainApp {
     public static void main(String[] args) {

@@ -10,11 +10,11 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>Day_1</module>
-        <module>Day_2</module>
-        <module>Day_3</module>
-        <module>Day_4</module>
-        <module>Day_5</module>
+        <module>Day_1_Week_2</module>
+        <module>Day_2_Week_2</module>
+        <module>Day_3_Week_2</module>
+        <module>Day_4_Week_2</module>
+        <module>Day_5_Week_2</module>
     </modules>
 
     <!-- Propiedades y configuración de compilación -->
@@ -48,25 +48,29 @@
             <!-- Dependencias entre días -->
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>Day_1</artifactId>
+                <artifactId>Day_1_Week_2</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>Day_2</artifactId>
+                <artifactId>Day_2_Week_2</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>Day_3</artifactId>
+                <artifactId>Day_3_Week_2</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>${project.groupId}</groupId>
-                <artifactId>Day_4</artifactId>
+                <artifactId>Day_4_Week_2</artifactId>
                 <version>${project.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>Day_5_Week_2</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

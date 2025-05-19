@@ -1,4 +1,4 @@
-package manager;
+package Day_5_Week_2.src.main.java.manager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
