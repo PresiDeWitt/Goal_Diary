@@ -21,6 +21,7 @@ public class Main {
         System.out.println("1. Gson (Google)");
         System.out.println("2. Jackson (FasterXML)");
 
+
         Scanner scanner = new Scanner(System.in);
         int option = getOption(scanner, 1, 2);
 
@@ -33,6 +34,7 @@ public class Main {
             jsonParser = new JacksonParser();
             System.out.println("Utilizando Jackson para el parsing de JSON");
         }
+
 
         // Crear servicios
         ApiService apiService = new ApiService();
