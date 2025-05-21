@@ -27,7 +27,6 @@ public class HttpExplorer {
 
             HttpResponseModel httpResponse = HttpClient.makeHttpRequest(urlToConnect);
             HttpResponsePrinter.displayHttpResponse(httpResponse);
-
             scanner.close();
         } catch (Exception e) {
             System.err.println("Error principal: " + e.getMessage());
