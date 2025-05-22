@@ -18,4 +18,16 @@ public class AuthConfig {
     public String getBearerToken() { return bearerToken; }
     public String getApiKey() { return apiKey; }
     public String getClientVersion() { return clientVersion; }
+    // Agregar setters
+    public void setBearerToken(String bearerToken) {
+        this.bearerToken = bearerToken;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    public void setClientVersion(String clientVersion) {
+        this.clientVersion = clientVersion;
+    }
 }
