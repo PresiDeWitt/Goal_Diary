@@ -318,7 +318,7 @@ public class EnhancedApiClient {
 
 
     /**
-     * Método de conveniencia para APIs REST comunes
+     * Metodo de conveniencia para APIs REST comunes
      */
     public static class ApiBuilder {
         private final EnhancedApiClient client;
