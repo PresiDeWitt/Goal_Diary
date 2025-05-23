@@ -9,7 +9,7 @@ import java.util.List;
 // DataLoader.java - Responsable de cargar datos en la base de datos
 public class DataLoader {
     private static final String DB_URL = "jdbc:sqlite:etl_database.db";
-    private Connection connection;
+    protected Connection connection; // Changed to protected for inheritance
 
     /**
      * Inicializa la conexión a la base de datos y crea las tablas necesarias
@@ -195,5 +195,10 @@ public class DataLoader {
                 System.err.println("Error al cerrar conexión: " + e.getMessage());
             }
         }
+    }
+
+    // Protected getter for subclasses
+    protected Connection getConnection() {
+        return connection;
     }
 }
