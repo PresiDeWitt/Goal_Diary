@@ -23,7 +23,7 @@ It is structured as a **multi-module Maven project**, where each module correspo
 ## 📦 Project Structure
 
 The project is divided into weekly modules, with dedicated folders for each week and its corresponding days and exercises:
-
+```
 Goal_Diary/
 ├── Week_1/
 │   ├── Day_1/
@@ -44,7 +44,7 @@ Goal_Diary/
 │   ├── ...
 ├── README.md
 ├── ...
-
+```
 
 ✅ Each `Week_X` corresponds to a week of practice.  
 ✅ Each `Day_Y` is an independent module with its own `pom.xml` and Maven structure.  
